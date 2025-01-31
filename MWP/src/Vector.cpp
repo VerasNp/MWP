@@ -1,5 +1,6 @@
 #include "Vector.hpp"
 #include <stdexcept>
+#include <sys/types.h>
 
 using namespace MWP;
 
