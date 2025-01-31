@@ -1,6 +1,6 @@
 #include "Vector.hpp"
 #include <stdexcept>
-#include <sys/types.h>
+
 
 using namespace MWP;
 
@@ -8,7 +8,7 @@ template <typename T> Vector<T>::Vector(std::vector<T> components) {
   _vector = components;
 }
 
-template <typename T> u_int Vector<T>::Size() const {
+template <typename T> unsigned int Vector<T>::Size() const {
   return this->_vector.size();
 }
 

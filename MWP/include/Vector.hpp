@@ -125,7 +125,7 @@ public:
    *
    * @return The length of the vector.
    */
-  u_int Size() const;
+  unsigned int Size() const;
 };
 
 typedef Vector<double> VectorD;
