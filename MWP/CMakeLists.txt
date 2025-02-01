@@ -1,6 +1,8 @@
 add_library(MWP
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Vector.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Vector.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Matrix.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Matrix.cpp"
 )
 
 target_include_directories(MWP PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")

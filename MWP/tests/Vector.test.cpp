@@ -12,6 +12,16 @@ TEST_CASE("Tests the vectos class and its functionalities") {
     CHECK(vectorI[1] == 2);
     CHECK(vectorI[2] == 3);
   }
+  SUBCASE("Should create a vector with given number of rows") {
+    MWP::VectorD vectorD(3);
+    CHECK(vectorD[0] == 0.0f);
+    CHECK(vectorD[1] == 0.0f);
+    CHECK(vectorD[2] == 0.0f);
+    MWP::VectorI vectorI(3);
+    CHECK(vectorI[0] == 0);
+    CHECK(vectorI[1] == 0);
+    CHECK(vectorI[2] == 0);
+  }
   SUBCASE("Should return the size of vector") {
     MWP::VectorD vectorD({1.0f, 2.0f, 3.0f});
     CHECK(vectorD.Size() == 3);

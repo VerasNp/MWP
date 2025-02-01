@@ -1,11 +1,21 @@
 #include "Vector.hpp"
+#include <iostream>
 #include <stdexcept>
-
 
 using namespace MWP;
 
 template <typename T> Vector<T>::Vector(std::vector<T> components) {
-  _vector = components;
+  _vector.resize(components.size());
+  for (int i = 0; i < components.size(); i++) {
+    _vector[i] = components[i];
+  }
+}
+
+template <typename T> Vector<T>::Vector(unsigned int rows) {
+  _vector.resize(rows);
+  for (int i = 0; i < rows; i++) {
+    _vector[i] = (T)0;
+  }
 }
 
 template <typename T> unsigned int Vector<T>::Size() const {

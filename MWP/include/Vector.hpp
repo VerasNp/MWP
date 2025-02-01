@@ -17,6 +17,8 @@ public:
    */
   Vector(std::vector<T> vector);
 
+  Vector(unsigned int rows);
+
 public:
   /**
    * @brief Access the vector components by index
