@@ -1,28 +1,29 @@
 #pragma once
 
-#include <cstddef>
 #include <vector>
-#include "Vector.hpp"
+
 namespace MWP {
 template <typename T> class Matrix {
 public:
-  std::vector<T> _matrix;
+  std::vector<T> _elements;
   unsigned int _rows;
   unsigned int _columns;
   unsigned int _size;
 
 public:
   /**
-   * @brief Construct a new Matrix< T> object
+   * @brief Default constructor for matrix
    *
-   * @param matrix
+   * Init a empty matrix and size equal to zero
+   *
    */
-  Matrix<T>(std::vector<T> matrix, unsigned int rows, unsigned int columns);
+  Matrix<T>();
+
   /**
    * @brief Constructor for the Matrix class.
    *
    * This constructor initializes the matrix with the given number of rows and
-   * columns.
+   * columns and set all elements to zero.
    *
    * @tparam T The type of the matrix elements.
    * @param rows The number of rows in the matrix.
@@ -31,56 +32,102 @@ public:
   Matrix<T>(unsigned int rows, unsigned int columns);
 
   /**
-   * @brief Constructor for the Matrix class.
+   * @brief Constructor for given number of rows and columns
    *
-   * This constructor initializes the matrix with the given number of rows and
-   * columns and the given matrix values.
+   * Init the matrix with given columns, rows and set the given
+   * elements
    *
-   * @tparam T The type of the matrix elements.
+   * @tparam T The data type of the matrix elements.
+   * @param elements The elements of matrix.
    * @param rows The number of rows in the matrix.
    * @param columns The number of columns in the matrix.
-   * @param matrix The matrix values.
    */
-  Matrix<T>(size_t rows, size_t columns, std::vector<T> matrix);
+  Matrix<T>(std::vector<T> elements, unsigned int rows, unsigned int columns);
 
 public:
   /**
-   * @brief Access the matrix components by index
+   * @brief Access the matrix element by index.
    *
-   * This method allows for the access of the matrix components by index.
+   * This method allows to access a matrix element by the index.
    *
-   * @param index The index of the component
-   * @return The value of the component
+   * @tparam T The data type of the matrix elements
+   * @param index The index of the element.
+   * @return The value of the element.
    */
   T operator[](unsigned int index) const;
 
   /**
-   * @brief Access the matrix components by index
+   * @brief Access the matrix element by index.
    *
-   * This method allows for the access of the matrix components by index.
+   * This method allows to access a matrix element by the index.
    *
-   * @param index The index of the component
-   * @return The reference to the component
+   * @tparam T The data type of the matrix elements
+   * @param index The index of the element.
+   * @return The reference to the element.
    */
   T &operator[](unsigned int index);
 
   /**
-   * @brief
+   * @brief Access the matrix components by row index and column index.
    *
-   * @param rowIndex
-   * @param columnsIndex
-   * @return T
+   * This method allows to access a matrix element by its position, using column
+   * and row indexes.
+   *
+   * @tparam T description
+   * @param rowIndex The row index of the element position.
+   * @param columnsIndex The column index of the element position.
+   * @return The element in the asked position.
    */
   T operator()(unsigned int rowIndex, unsigned int columnsIndex) const;
 
   /**
-   * @brief
+   * @brief Access the matrix components by row index and column index.
    *
-   * @param rowIndex
-   * @param columnsIndex
-   * @return T&
+   * This method allows to access a matrix element by its position, using column
+   * and row indexes.
+   *
+   * @tparam T description
+   * @param rowIndex The row index of the element position.
+   * @param columnsIndex The column index of the element position.
+   * @return The element in the asked position.
    */
   T &operator()(unsigned int rowIndex, unsigned int columnsIndex);
+
+  /**
+   * @brief Overloads the addition operator for Matrix objects.
+   *
+   * This operator allows for the addition of two Matrix objects.
+   *
+   * @tparam T The type of the matrix elements.
+   * @param matrix The matrix to be added to the current matrix.
+   * @return A new Matrix object that is the result of the matrix
+   * addition.
+   */
+  Matrix<T> operator+(const Matrix<T> &matrix) const;
+
+  /**
+   * @brief Overloads the addition operator for Matrix objects.
+   *
+   * This operator allows for the addition of two Matrix objects.
+   *
+   * @tparam T The type of the matrix elements.
+   * @param matrix The matrix to be added to the current matrix.
+   * @return A new Matrix object that is the result of the matrix
+   * addition.
+   */
+  Matrix<T> &operator+(const Matrix<T> &matrix); 
+
+  /**
+   * @brief Overloads the subtraction operator for Matrix objects.
+   *
+   * This operator allows for the addition of two Matrix objects.
+   *
+   * @tparam T The type of the matrix elements.
+   * @param matrix The matrix to be subtracted to the current matrix.
+   * @return A new Matrix object that is the result of the matrix
+   * subtraction.
+   */
+  Matrix<T> operator-(const Matrix<T> &matrix) const;
 
   /**
   * @brief Overloads the multiplication operator for Matrix objects.
@@ -107,19 +154,11 @@ public:
    */
   Matrix<T> operator*(const Matrix<T> &matrix) const;
 
-  
-  Vector<T> operator*(const Vector<T> &vector) const;
+  // TODO: Implement
+  double Det() const;
 
-  /**
-   * @brief Overloads the addition operator for Matrix objects.
-   *
-   * This operator allows for the addition of two Matrix objects.
-   *
-   * @tparam T The type of the matrix elements.
-   * @param matrix The matrix to be added to the current matrix.
-   * @return A new Matrix object that is the result of the matrix addition.
-   */
-  Matrix<T> operator+(const Matrix<T> &matrix) const;
+  // TODO: Implement
+  Matrix<T> Inverse() const;
 };
 typedef Matrix<double> MatrixD;
 typedef Matrix<int> MatrixI;
