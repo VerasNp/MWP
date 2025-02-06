@@ -1,4 +1,5 @@
 #include "Matrix.hpp"
+#include "Vector.hpp"
 #include "doctest/doctest.h"
 #include <stdexcept>
 #include <vector>
@@ -157,5 +158,12 @@ TEST_CASE("Tests the matrix class") {
     CHECK(matrixIRes(1, 0) == 2);
     CHECK(matrixIRes(1, 1) == 4);
     CHECK(matrixIRes(1, 2) == 6);
+  }
+  SUBCASE("Should multiply a matrix by a column vector") {
+    MWP::MatrixD matrix1D({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f}, 2, 3);
+    MWP::VectorD vector1D({3.0f, 2.0f, 1.0f}, 3, 1);
+    MWP::VectorD vector1Res = matrix1D * vector1D;
+    CHECK(vector1Res[0] == 10.0f);
+    CHECK(vector1Res[1] == 28.0f);
   }
 }

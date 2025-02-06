@@ -7,17 +7,47 @@ namespace MWP {
 
 template <typename T> class Vector {
 public:
-  std::vector<T> _vector;
+  std::vector<T> _elements;
+  unsigned int _rows;
+  unsigned int _columns;
+  unsigned int _size;
 
 public:
   /**
+   * @brief Default constructor for vector
+   *
+   * Init a empty vector and size equal to zero
+   *
+   */
+  Vector();
+
+  /**
    * @brief Constructor for the Vector class.
    *
-   * This constructor initializes the vector.
+   * This constructor initializes the vector with the given number of rows and
+   * columns and set all elements to zero.
+   *
+   * It's recommended fill the row (for column vector) or column (for row
+   * vector) param.
+   *
+   * @tparam T The type of the vector elements.
+   * @param rows The number of rows in the vector.
+   * @param columns The number of columns in the vector.
    */
-  Vector(std::vector<T> vector);
+  Vector(unsigned int rows, unsigned int columns);
 
-  Vector(unsigned int rows);
+  /**
+   * @brief Constructor for given elements and number of rows and columns
+   *
+   * Init the vector with given columns, rows and set the given
+   * elements
+   *
+   * @tparam T The data type of the vector elements.
+   * @param elements The elements of vector.
+   * @param rows The number of rows in the vector.
+   * @param columns The number of columns in the vector.
+   */
+  Vector(std::vector<T> elements, unsigned int rows, unsigned int columns);
 
 public:
   /**
@@ -119,15 +149,6 @@ public:
    * @return A reference to the current vector after the multiplication.
    */
   Vector<T> &operator*=(T scalar);
-
-  /**
-   * @brief Returns the amount of components
-   *
-   * This method calculates the length of the vector.
-   *
-   * @return The length of the vector.
-   */
-  unsigned int Size() const;
 
 };
 

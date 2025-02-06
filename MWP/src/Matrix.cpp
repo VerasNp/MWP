@@ -1,5 +1,4 @@
 #include "Matrix.hpp"
-#include <iostream>
 #include <stdexcept>
 #include <vector>
 
@@ -29,19 +28,19 @@ Matrix<T>::Matrix(unsigned int rows, unsigned int columns) {
 }
 
 template <typename T>
-Matrix<T>::Matrix(std::vector<T> matrix, unsigned int rows,
+Matrix<T>::Matrix(std::vector<T> elements, unsigned int rows,
                   unsigned int columns) {
   if (columns == 0 || rows == 0) {
     throw std::runtime_error("The row or column attribute cannot be zero");
   }
-  if (matrix.size() != columns * rows) {
+  if (elements.size() != columns * rows) {
     throw std::runtime_error(
         "The amount of elements do not match with the matrix size");
   }
   _rows = rows;
   _columns = columns;
   _size = rows * columns;
-  _elements = matrix;
+  _elements = elements;
 }
 
 template <typename T> T Matrix<T>::operator[](unsigned int index) const {
@@ -139,6 +138,22 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> &matrix) const {
   return result;
 }
 
+template <typename T>
+Vector<T> Matrix<T>::operator*(const Vector<T> &vector) const {
+  if (this->_columns != vector._rows || vector._columns != 1) {
+    throw std::runtime_error(
+        "Invalid dimensions for matrix-vector multiplication");
+  }
+  Vector<T> result(1, this->_rows);
+  for (int i = 0; i < this->_rows; i++) {
+    result[i] = (T)0;
+    for (int j = 0; j < this->_columns; j++) {
+      result[i] += this->_elements[i * this->_columns + j] * vector[j];
+    }
+  }
+  return result;
+}
+
 template <typename T> Matrix<T> &Matrix<T>::Transpose() {
   std::vector<T> transposedElements;
   transposedElements.resize(this->_size);
@@ -149,7 +164,7 @@ template <typename T> Matrix<T> &Matrix<T>::Transpose() {
   for (int i = 0; i < this->_rows; i++) {
     for (int j = 0; j < this->_columns; j++) {
       transposedElements[i * this->_columns + j] =
-      this->_elements[j * this->_rows + i];
+          this->_elements[j * this->_rows + i];
     }
   }
   this->_elements = transposedElements;

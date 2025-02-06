@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Vector.hpp"
 #include <vector>
 
 namespace MWP {
@@ -32,7 +33,7 @@ public:
   Matrix<T>(unsigned int rows, unsigned int columns);
 
   /**
-   * @brief Constructor for given number of rows and columns
+   * @brief Constructor for given elements and number of rows and columns
    *
    * Init the matrix with given columns, rows and set the given
    * elements
@@ -141,6 +142,18 @@ public:
    * multiplication.
    */
   Matrix<T> operator*(const Matrix<T> &matrix) const;
+
+  /**
+   * @brief Overloads the multiplication operator for Matrix objects.
+   *
+   * This operator allows for the multiplication of two Matrix objects.
+   *
+   * @tparam T The type of the matrix elements.
+   * @param matrix The matrix to be multiplied by the current matrix.
+   * @return A new Matrix object that is the result of the matrix
+   * multiplication.
+   */
+  Vector<T> operator*(const Vector<T> &vector) const;
 
   // TODO: Implement
   double Det() const;
