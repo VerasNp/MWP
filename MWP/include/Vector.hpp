@@ -17,7 +17,6 @@ public:
    * @brief Default constructor for vector
    *
    * Init a empty vector and size equal to zero
-   *
    */
   Vector();
 
@@ -84,19 +83,6 @@ public:
   Vector<T> operator+(const Vector<T> &vector) const;
 
   /**
-   * @brief Overloads the addition assignment operator for Vector objects.
-   *
-   * This operator allows for the addition of two Vector objects.
-   * It modifies the current vector by adding the components of the
-   * input vector to the corresponding components of the current vector.
-   *
-   * @tparam T The type of the vector components.
-   * @param vector The vector to be added to the current vector.
-   * @return A reference to the current vector after the addition.
-   */
-  Vector<T> &operator+=(const Vector<T> &vector);
-
-  /**
    * @brief Overloads the subtraction operator for Vector objects.
    *
    * This operator allows for the subtraction of two Vector objects.
@@ -108,19 +94,6 @@ public:
    * @return A new Vector object that is the result of the vector subtraction.
    */
   Vector<T> operator-(const Vector<T> &vector) const;
-
-  /**
-   * @brief Overloads the subtraction assignment operator for Vector objects.
-   *
-   * This operator allows for the subtraction of two Vector objects.
-   * It modifies the current vector by subtracting the components of the
-   * input vector from the corresponding components of the current vector.
-   *
-   * @tparam T The type of the vector components.
-   * @param vector The vector to be subtracted from the current vector.
-   * @return A reference to the current vector after the subtraction.
-   */
-  Vector<T> &operator-=(const Vector<T> &vector);
 
   /**
    * @brief Overloads the multiplication operator for Vector objects.
@@ -135,21 +108,6 @@ public:
    * multiplication.
    */
   Vector<T> operator*(T scalar) const;
-
-  /**
-   * @brief Overloads the multiplication assignment operator for Vector
-   * objects.
-   *
-   * This operator allows for the multiplication of a Vector object by a
-   * scalar. It modifies the current vector by multiplying the components of the
-   * vector by the scalar value.
-   *
-   * @tparam T The type of the vector components.
-   * @param scalar The scalar value to multiply the vector by.
-   * @return A reference to the current vector after the multiplication.
-   */
-  Vector<T> &operator*=(T scalar);
-
 };
 
 typedef Vector<double> VectorD;

@@ -15,6 +15,15 @@ TEST_CASE("Tests the matrix class") {
   }
   SUBCASE("Should init a matrix with all zero components with given rows and "
           "columns") {
+    SUBCASE("Should not init a matrix with all zero components if columns or "
+            "rows are equal to zero") {
+      CHECK_THROWS_WITH_AS(MWP::MatrixD matrix1D(0, 1),
+                           "The row or column attribute cannot be zero",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(MWP::MatrixD matrix1D(1, 0),
+                           "The row or column attribute cannot be zero",
+                           std::runtime_error);
+    }
     MWP::MatrixD matrix1D(3, 1);
     for (int i = 0; i < matrix1D._rows; i++) {
       for (int j = 0; j < matrix1D._columns; j++) {
@@ -44,12 +53,6 @@ TEST_CASE("Tests the matrix class") {
       }
     }
   }
-  SUBCASE("Should not access element of matrix if index if out of bounds") {
-    MWP::MatrixD matrix(1, 1);
-    CHECK_THROWS_WITH_AS(matrix[1], "Index out of bounds", std::runtime_error);
-    CHECK_THROWS_WITH_AS(matrix(1, 1), "Index out of bounds",
-                         std::runtime_error);
-  }
   SUBCASE("Should init a matrix with given elements, columns and rows") {
     SUBCASE("Should not init a matrix with given elements, columns and rows if "
             "the column or rows are equal to zero") {
@@ -74,6 +77,18 @@ TEST_CASE("Tests the matrix class") {
     CHECK(matrixD(1, 0) == 2.0f);
     CHECK(matrixD[2] == 3.0f);
     CHECK(matrixD(2, 0) == 3.0f);
+  }
+  SUBCASE("Should access an element in the matrix") {
+    SUBCASE("Should not access element of matrix if index if out of bounds") {
+      MWP::MatrixD matrix(1, 1);
+      CHECK_THROWS_WITH_AS(matrix[1], "Index out of bounds",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(matrix(1, 1), "Index out of bounds",
+                           std::runtime_error);
+    }
+    MWP::MatrixD matrixD(std::vector<double>({1.0f}), 1, 1);
+    CHECK(matrixD[0] == 1.0f);
+    CHECK(matrixD(0, 0) == 1.0f);
   }
   SUBCASE("Should sum two matrices") {
     SUBCASE("Should not sum two matrices with incompatible dimensions") {

@@ -38,7 +38,7 @@ Vector<T>::Vector(std::vector<T> elements, unsigned int rows,
   }
   if (rows != 1 && columns != 1) {
     throw std::runtime_error(
-        "The rows and columns attribute cannot be different from zero both!");
+        "The rows and columns attribute cannot be different from one both!");
   }
   if (elements.size() != columns * rows) {
     throw std::runtime_error(
@@ -64,54 +64,39 @@ template <typename T> T &Vector<T>::operator[](int index) {
   return this->_elements[index];
 }
 
-// template <typename T>
-// Vector<T> Vector<T>::operator+(const Vector<T> &vector) const {
-//   Vector<T> result(this->_vector);
-//   for (int i = 0; i < this->Size(); i++) {
-//     result._vector[i] = this->_vector[i] + vector._vector[i];
-//   }
-//   return result;
-// }
+template <typename T>
+Vector<T> Vector<T>::operator+(const Vector<T> &vector) const {
+  if (this->_rows != vector._rows || this->_columns != vector._columns) {
+    throw std::runtime_error(
+        "Invalid vectors dimensions for addition operation");
+  }
+  Vector<T> result(this->_elements, this->_rows, this->_columns);
+  for (int i = 0; i < this->_size; i++) {
+    result._elements[i] = this->_elements[i] + vector._elements[i];
+  }
+  return result;
+}
 
-// template <typename T>
-// Vector<T> &Vector<T>::operator+=(const Vector<T> &vector) {
-//   for (int i = 0; i < this->Size(); i++) {
-//     this->_vector[i] += vector._vector[i];
-//   }
-//   return *this;
-// }
+template <typename T>
+Vector<T> Vector<T>::operator-(const Vector<T> &vector) const {
+  if (this->_rows != vector._rows || this->_columns != vector._columns) {
+    throw std::runtime_error(
+        "Invalid vectors dimensions for subtraction operation");
+  }
+  Vector<T> result(this->_elements, this->_rows, this->_columns);
+  for (int i = 0; i < this->_size; i++) {
+    result._elements[i] = this->_elements[i] - vector._elements[i];
+  }
+  return result;
+}
 
-// template <typename T>
-// Vector<T> Vector<T>::operator-(const Vector<T> &vector) const {
-//   Vector<T> result(this->_vector);
-//   for (int i = 0; i < this->Size(); i++) {
-//     result._vector[i] = this->_vector[i] - vector._vector[i];
-//   }
-//   return result;
-// }
-
-// template <typename T>
-// Vector<T> &Vector<T>::operator-=(const Vector<T> &vector) {
-//   for (int i = 0; i < this->Size(); i++) {
-//     this->_vector[i] -= vector._vector[i];
-//   }
-//   return *this;
-// }
-
-// template <typename T> Vector<T> Vector<T>::operator*(T scalar) const {
-//   Vector<T> result(this->_vector);
-//   for (int i = 0; i < this->Size(); i++) {
-//     result._vector[i] = this->_vector[i] * scalar;
-//   }
-//   return result;
-// }
-
-// template <typename T> Vector<T> &Vector<T>::operator*=(T scalar) {
-//   for (int i = 0; i < this->Size(); i++) {
-//     this->_vector[i] *= scalar;
-//   }
-//   return *this;
-// }
+template <typename T> Vector<T> Vector<T>::operator*(T scalar) const {
+  Vector<T> result(this->_elements, this->_rows, this->_columns);
+  for (int i = 0; i < this->_size; i++) {
+    result._elements[i] = this->_elements[i] * scalar;
+  }
+  return result;
+}
 
 template class MWP::Vector<double>;
 template class MWP::Vector<int>;
