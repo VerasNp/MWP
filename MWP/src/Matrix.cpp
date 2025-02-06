@@ -1,4 +1,5 @@
 #include "Matrix.hpp"
+#include <iostream>
 #include <stdexcept>
 #include <vector>
 
@@ -122,7 +123,8 @@ template <typename T> Matrix<T> Matrix<T>::operator*(T scalar) const {
 template <typename T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T> &matrix) const {
   if (this->_columns != matrix._rows) {
-    throw std::runtime_error("Invalid matrices dimensions for multiplication operation");
+    throw std::runtime_error(
+        "Invalid matrices dimensions for multiplication operation");
   }
   Matrix<T> result(this->_rows, matrix._columns);
   for (int i = 0; i < this->_rows; i++) {
@@ -135,6 +137,23 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> &matrix) const {
     }
   }
   return result;
+}
+
+template <typename T> Matrix<T> &Matrix<T>::Transpose() {
+  std::vector<T> transposedElements;
+  transposedElements.resize(this->_size);
+  const int rows = this->_rows;
+  const int columns = this->_columns;
+  this->_rows = columns;
+  this->_columns = rows;
+  for (int i = 0; i < this->_rows; i++) {
+    for (int j = 0; j < this->_columns; j++) {
+      transposedElements[i * this->_columns + j] =
+      this->_elements[j * this->_rows + i];
+    }
+  }
+  this->_elements = transposedElements;
+  return *this;
 }
 
 template class MWP::Matrix<double>;

@@ -106,18 +106,6 @@ public:
   Matrix<T> operator+(const Matrix<T> &matrix) const;
 
   /**
-   * @brief Overloads the addition operator for Matrix objects.
-   *
-   * This operator allows for the addition of two Matrix objects.
-   *
-   * @tparam T The type of the matrix elements.
-   * @param matrix The matrix to be added to the current matrix.
-   * @return A new Matrix object that is the result of the matrix
-   * addition.
-   */
-  Matrix<T> &operator+(const Matrix<T> &matrix); 
-
-  /**
    * @brief Overloads the subtraction operator for Matrix objects.
    *
    * This operator allows for the addition of two Matrix objects.
@@ -159,7 +147,29 @@ public:
 
   // TODO: Implement
   Matrix<T> Inverse() const;
+
+  /**
+   * @brief Transpose the current matrix
+   *
+   * Transpose operation, all the row elements turn into column elements and
+   * vice versa
+   *
+   * @return Matrix<T> Transposed matrix
+   */
+  Matrix<T> &Transpose();
 };
 typedef Matrix<double> MatrixD;
 typedef Matrix<int> MatrixI;
 } // namespace MWP
+
+template <typename T>
+inline MWP::Matrix<T> Transpose(const MWP::Matrix<T> &matrix) {
+  MWP::Matrix<T> transposedMatrix(matrix._columns, matrix._rows);
+  for (int i = 0; i < transposedMatrix._rows; i++) {
+    for (int j = 0; j < transposedMatrix._columns; j++) {
+      transposedMatrix._elements[i * transposedMatrix._columns + j] =
+          matrix._elements[j * transposedMatrix._rows + i];
+    }
+  }
+  return transposedMatrix;
+}

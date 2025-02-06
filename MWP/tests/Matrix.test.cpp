@@ -96,9 +96,10 @@ TEST_CASE("Tests the matrix class") {
     SUBCASE("Should not subtract two matrices with incompatible dimensions") {
       MWP::MatrixD matrix1D({1.0f, 2.0f, 3.0f}, 1, 3);
       MWP::MatrixD matrix2D({1.0f, 2.0f, 3.0f}, 3, 1);
-      CHECK_THROWS_WITH_AS(matrix1D - matrix2D,
-                           "Invalid matrices dimensions for subtraction operation",
-                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          matrix1D - matrix2D,
+          "Invalid matrices dimensions for subtraction operation",
+          std::runtime_error);
     }
     MWP::MatrixD matrix1D({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f}, 3, 2);
     MWP::MatrixD matrix2D({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f}, 3, 2);
@@ -127,16 +128,34 @@ TEST_CASE("Tests the matrix class") {
             "dimensions for multiplication operation") {
       MWP::MatrixD matrix1D({1.0f, 2.0f}, 1, 2);
       MWP::MatrixD matrix2D({1.0f}, 1, 1);
-      CHECK_THROWS_WITH_AS(matrix1D * matrix2D,
-                           "Invalid matrices dimensions for multiplication operation",
-                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          matrix1D * matrix2D,
+          "Invalid matrices dimensions for multiplication operation",
+          std::runtime_error);
     }
     MWP::MatrixD matrix1D({1.0f, 2.0f}, 1, 2);
-    MWP::MatrixD matrix2D({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f}, 2,
-                          3);
+    MWP::MatrixD matrix2D({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f}, 2, 3);
     MWP::MatrixD matrixDRes = matrix1D * matrix2D;
     CHECK(matrixDRes(0, 0) == 9.0f);
     CHECK(matrixDRes(0, 1) == 12.0f);
     CHECK(matrixDRes(0, 2) == 15.0f);
+  }
+  SUBCASE("Should transpose a matrix") {
+    MWP::MatrixD matrixD({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f}, 3, 2);
+    matrixD.Transpose();
+    CHECK(matrixD(0, 0) == 1.0f);
+    CHECK(matrixD(0, 1) == 3.0f);
+    CHECK(matrixD(0, 2) == 5.0f);
+    CHECK(matrixD(1, 0) == 2.0f);
+    CHECK(matrixD(1, 1) == 4.0f);
+    CHECK(matrixD(1, 2) == 6.0f);
+    MWP::MatrixI matrixI({1, 2, 3, 4, 5, 6}, 3, 2);
+    MWP::MatrixI matrixIRes = Transpose(matrixI);
+    CHECK(matrixIRes(0, 0) == 1);
+    CHECK(matrixIRes(0, 1) == 3);
+    CHECK(matrixIRes(0, 2) == 5);
+    CHECK(matrixIRes(1, 0) == 2);
+    CHECK(matrixIRes(1, 1) == 4);
+    CHECK(matrixIRes(1, 2) == 6);
   }
 }
