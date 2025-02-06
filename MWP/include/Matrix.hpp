@@ -156,10 +156,10 @@ public:
   Vector<T> operator*(const Vector<T> &vector) const;
 
   // TODO: Implement
-  double Det() const;
+  double det() const;
 
   // TODO: Implement
-  Matrix<T> Inverse() const;
+  Matrix<T> inverse() const;
 
   /**
    * @brief Transpose the current matrix
@@ -169,7 +169,39 @@ public:
    *
    * @return Matrix<T> Transposed matrix
    */
-  Matrix<T> &Transpose();
+  Matrix<T> &transpose();
+
+  /**
+   * @brief Check if the matrix is square
+   *
+   * Square matrices have its number of rows equal to the number of columns.
+   *
+   * @return true Is a square matrix
+   * @return false Is not a square matrix
+   */
+  bool isSquare();
+
+  /**
+   * @brief Check if the matrix is lower triangular
+   *
+   * Lower triangular matrix is a is a special kind of square matrix with all
+   * the elements above the main diagonal are zero.
+   *
+   * @return true Is a lower triangular matrix
+   * @return false Is not a lower triangular matrix
+   */
+  bool isLowerTriangular();
+
+  /**
+   * @brief Check if the matrix is upper triangular
+   *
+   * Upper triangular matrix is a is a special kind of square matrix with all
+   * the elements below the main diagonal are zero.
+   *
+   * @return true Is a upper triangular matrix
+   * @return false Is not a upper triangular matrix
+   */
+  bool isUpperTriangular();
 };
 typedef Matrix<double> MatrixD;
 typedef Matrix<int> MatrixI;

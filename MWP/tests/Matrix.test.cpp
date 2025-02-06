@@ -158,7 +158,7 @@ TEST_CASE("Tests the matrix class") {
   }
   SUBCASE("Should transpose a matrix") {
     MWP::MatrixD matrixD({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f}, 3, 2);
-    matrixD.Transpose();
+    matrixD.transpose();
     CHECK(matrixD(0, 0) == 1.0f);
     CHECK(matrixD(0, 1) == 3.0f);
     CHECK(matrixD(0, 2) == 5.0f);
@@ -180,5 +180,23 @@ TEST_CASE("Tests the matrix class") {
     MWP::VectorD vector1Res = matrix1D * vector1D;
     CHECK(vector1Res[0] == 10.0f);
     CHECK(vector1Res[1] == 28.0f);
+  }
+  SUBCASE("Should return if a matrix is square") {
+    MWP::MatrixD matrix1D({1.0f, 2.0f, 3.0f, 4.0f}, 2, 2);
+    CHECK(matrix1D.isSquare());
+    MWP::MatrixD matrix2D({1.0f, 2.0f}, 2, 1);
+    CHECK(!matrix2D.isSquare());
+  }
+  SUBCASE("Should return if a matrix is lower triangular") {
+    MWP::MatrixD matrix1D({1.0f, 0.0f, 4.0f, 4.0f}, 2, 2);
+    CHECK(matrix1D.isLowerTriangular());
+    MWP::MatrixD matrix2D({1.0f, 1.0f, 4.0f, 4.0f}, 2, 2);
+    CHECK(!matrix2D.isLowerTriangular());
+  }
+  SUBCASE("Should return if a matrix is upper triangular") {
+    MWP::MatrixD matrix1D({1.0f, 2.0f, 0.0f, 4.0f}, 2, 2);
+    CHECK(matrix1D.isUpperTriangular());
+    MWP::MatrixD matrix2D({1.0f, 1.0f, 4.0f, 4.0f}, 2, 2);
+    CHECK(!matrix2D.isUpperTriangular());
   }
 }

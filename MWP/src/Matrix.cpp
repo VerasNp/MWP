@@ -154,7 +154,7 @@ Vector<T> Matrix<T>::operator*(const Vector<T> &vector) const {
   return result;
 }
 
-template <typename T> Matrix<T> &Matrix<T>::Transpose() {
+template <typename T> Matrix<T> &Matrix<T>::transpose() {
   std::vector<T> transposedElements;
   transposedElements.resize(this->_size);
   const int rows = this->_rows;
@@ -169,6 +169,36 @@ template <typename T> Matrix<T> &Matrix<T>::Transpose() {
   }
   this->_elements = transposedElements;
   return *this;
+}
+
+template <typename T> bool Matrix<T>::isSquare() {
+  return this->_rows == this->_columns;
+}
+
+template <typename T> bool Matrix<T>::isLowerTriangular() {
+  if (!this->isSquare())
+    return false;
+  for (int i = 0; i < this->_rows; i++) {
+    for (int j = 0; j < this->_columns; j++) {
+      if (i < j && (this->_elements[i * this->_columns + j]) != (T)0) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+template <typename T> bool Matrix<T>::isUpperTriangular() {
+  if (!this->isSquare())
+    return false;
+  for (int i = 0; i < this->_rows; i++) {
+    for (int j = 0; j < this->_columns; j++) {
+      if (i > j && (this->_elements[i * this->_columns + j]) != (T)0) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 template class MWP::Matrix<double>;

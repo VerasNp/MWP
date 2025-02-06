@@ -12,12 +12,42 @@ TEST_CASE("Tests the vectos class and its functionalities") {
     CHECK(vectorD._elements.empty());
   }
   SUBCASE("Should create a vector with given number of rows and column") {
+    SUBCASE("Should not create a vector with given number of rows and column "
+            "if the column or row attribute are zero") {
+      CHECK_THROWS_WITH_AS(MWP::VectorD vectorD(0, 1),
+                           "The row or column attribute cannot be zero",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(MWP::VectorD vectorD(1, 0),
+                           "The row or column attribute cannot be zero",
+                           std::runtime_error);
+    }
+    SUBCASE("Should not create a vector with given number of rows and column "
+            "if both column and row size are different from 1") {
+      CHECK_THROWS_WITH_AS(MWP::VectorD vectorD(2, 2),
+                           "Both rows and columns cannot be different from 1",
+                           std::runtime_error);
+    }
     MWP::VectorD vectorD(1, 3);
     CHECK(vectorD[0] == 0.0f);
     CHECK(vectorD[1] == 0.0f);
     CHECK(vectorD[2] == 0.0f);
   }
   SUBCASE("Should create a vector with given components") {
+    SUBCASE("Should not create a vector with given number of rows and column "
+            "if the column or row attribute are zero") {
+      CHECK_THROWS_WITH_AS(MWP::VectorD vectorD({1.0f}, 0, 1),
+                           "The row or column attribute cannot be zero",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(MWP::VectorD vectorD({1.0f}, 1, 0),
+                           "The row or column attribute cannot be zero",
+                           std::runtime_error);
+    }
+    SUBCASE("Should not create a vector with given number of rows and column "
+            "if both column and row size are different from 1") {
+      CHECK_THROWS_WITH_AS(MWP::VectorD vectorD({1.0f, 2.0f, 3.0f, 4.0f}, 2, 2),
+                           "Both rows and columns cannot be different from 1",
+                           std::runtime_error);
+    }
     MWP::VectorD vectorD({1.0f, 2.0f, 3.0f}, 3, 1);
     CHECK(vectorD[0] == 1.0f);
     CHECK(vectorD[1] == 2.0f);

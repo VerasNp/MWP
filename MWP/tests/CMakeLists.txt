@@ -1,6 +1,7 @@
 set(TestsToRun
     "${CMAKE_CURRENT_SOURCE_DIR}/Matrix.test.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Vector.test.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/LinSys.test.cpp"
 )
 
 foreach(test ${TestsToRun})

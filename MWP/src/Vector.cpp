@@ -17,7 +17,7 @@ Vector<T>::Vector(unsigned int rows, unsigned int columns) {
   }
   if (rows != 1 && columns != 1) {
     throw std::runtime_error(
-        "The rows and columns attribute cannot be different from zero both!");
+        "Both rows and columns cannot be different from 1");
   }
   this->_rows = rows;
   this->_columns = columns;
@@ -38,7 +38,7 @@ Vector<T>::Vector(std::vector<T> elements, unsigned int rows,
   }
   if (rows != 1 && columns != 1) {
     throw std::runtime_error(
-        "The rows and columns attribute cannot be different from one both!");
+        "Both rows and columns cannot be different from 1");
   }
   if (elements.size() != columns * rows) {
     throw std::runtime_error(
