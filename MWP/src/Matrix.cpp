@@ -1,5 +1,6 @@
 #include "Matrix.hpp"
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 using namespace MWP;
@@ -199,6 +200,30 @@ template <typename T> bool Matrix<T>::isUpperTriangular() {
     }
   }
   return true;
+}
+
+template <typename T>
+std::pair<MatrixD, MatrixD> Matrix<T>::LUDecomposition() {
+  if (this->_rows != this->_columns) {
+    throw std::runtime_error(
+        "The matrix should be square to be decomposed into LU matrices!");
+  }
+  MatrixD LMatrix = IdentityMatrix<double>(this->_rows, this->_columns);
+  std::vector<double> elementsDouble(this->_elements.begin(), this->_elements.end());
+  MatrixD UMatrix(elementsDouble, this->_rows, this->_columns);
+  for (int i = 0; i < this->_rows; i++) {
+    for (int j = 0; j < this->_columns; j++) {
+      if (i > j) {
+        LMatrix[i * this->_columns + j] =
+            UMatrix[i * this->_columns + j] / UMatrix[j * this->_columns + j];
+        for (int k = j; k < this->_columns; k++) {
+          UMatrix[i * this->_columns + k] -=
+              LMatrix[i * this->_columns + j] * UMatrix[j * this->_columns + k];
+        }
+      }
+    }
+  }
+  return std::pair<MatrixD, MatrixD>{LMatrix, UMatrix};
 }
 
 template class MWP::Matrix<double>;

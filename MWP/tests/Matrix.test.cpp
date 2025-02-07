@@ -2,6 +2,7 @@
 #include "Vector.hpp"
 #include "doctest/doctest.h"
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 TEST_CASE("Tests the matrix class") {
@@ -166,7 +167,7 @@ TEST_CASE("Tests the matrix class") {
     CHECK(matrixD(1, 1) == 4.0f);
     CHECK(matrixD(1, 2) == 6.0f);
     MWP::MatrixI matrixI({1, 2, 3, 4, 5, 6}, 3, 2);
-    MWP::MatrixI matrixIRes = Transpose(matrixI);
+    MWP::MatrixI matrixIRes = TransposeMatrix(matrixI);
     CHECK(matrixIRes(0, 0) == 1);
     CHECK(matrixIRes(0, 1) == 3);
     CHECK(matrixIRes(0, 2) == 5);
@@ -198,5 +199,50 @@ TEST_CASE("Tests the matrix class") {
     CHECK(matrix1D.isUpperTriangular());
     MWP::MatrixD matrix2D({1.0f, 1.0f, 4.0f, 4.0f}, 2, 2);
     CHECK(!matrix2D.isUpperTriangular());
+  }
+  SUBCASE("Should create an identity matrix") {
+    SUBCASE("Should not create an identity matrix if the given number of rows "
+            "and columns are different") {
+      CHECK_THROWS_WITH_AS(IdentityMatrix<double>(1, 2),
+                           "An identity matrix should have number of rows "
+                           "equal to the number of columns",
+                           std::runtime_error);
+    }
+    MWP::MatrixD identityMatrix = IdentityMatrix<double>(2, 2);
+    CHECK(identityMatrix(0, 0) == 1.0f);
+    CHECK(identityMatrix(0, 1) == 0.0f);
+    CHECK(identityMatrix(1, 0) == 0.0f);
+    CHECK(identityMatrix(1, 1) == 1.0f);
+  }
+  SUBCASE("Should decompose a matrix into LU matrices") {
+    SUBCASE("Should not decompose a matrix into LU matrices if the matrix is "
+            "not a square matrix") {
+              MWP::MatrixI matrix({1, 4}, 1, 2);
+      CHECK_THROWS_WITH_AS(
+          matrix.LUDecomposition(),
+          "The matrix should be square to be decomposed into LU matrices!",
+          std::runtime_error);
+    }
+    MWP::MatrixI matrix({1, 4, -3, -2, 8, 5, 3, 4, 7}, 3, 3);
+    std::pair<MWP::MatrixD, MWP::MatrixD> LUdecomposedMatrix =
+        matrix.LUDecomposition();
+    CHECK(LUdecomposedMatrix.first(0, 0) == 1.0f);
+    CHECK(LUdecomposedMatrix.first(0, 1) == 0.0f);
+    CHECK(LUdecomposedMatrix.first(0, 2) == 0.0f);
+    CHECK(LUdecomposedMatrix.first(1, 0) == -2.0f);
+    CHECK(LUdecomposedMatrix.first(1, 1) == 1.0f);
+    CHECK(LUdecomposedMatrix.first(1, 2) == 0.0f);
+    CHECK(LUdecomposedMatrix.first(2, 0) == 3.0f);
+    CHECK(LUdecomposedMatrix.first(2, 1) == -0.5f);
+    CHECK(LUdecomposedMatrix.first(2, 2) == 1.0f);
+    CHECK(LUdecomposedMatrix.second(0, 0) == 1.0f);
+    CHECK(LUdecomposedMatrix.second(0, 1) == 4.0f);
+    CHECK(LUdecomposedMatrix.second(0, 2) == -3.0f);
+    CHECK(LUdecomposedMatrix.second(1, 0) == 0.0f);
+    CHECK(LUdecomposedMatrix.second(1, 1) == 16.0f);
+    CHECK(LUdecomposedMatrix.second(1, 2) == -1.0f);
+    CHECK(LUdecomposedMatrix.second(2, 0) == 0.0f);
+    CHECK(LUdecomposedMatrix.second(2, 1) == 0.0f);
+    CHECK(LUdecomposedMatrix.second(2, 2) == 15.5f);
   }
 }

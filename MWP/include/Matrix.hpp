@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Vector.hpp"
+#include <stdexcept>
+#include <utility>
 #include <vector>
 
 namespace MWP {
@@ -202,13 +204,32 @@ public:
    * @return false Is not a upper triangular matrix
    */
   bool isUpperTriangular();
+
+  /**
+   * @brief Factors the matrix using lower-upper decomposition
+   *
+   * Factors the matrix as the product of a lower triangular matrix and an upper
+   * triangular matrix.
+   *
+   * @return std::pair<Matrix<T>, Matrix<T>> Lower triangular matrix and an
+   * upper triangular matrix
+   */
+  std::pair<Matrix<double>, Matrix<double>> LUDecomposition();
 };
 typedef Matrix<double> MatrixD;
 typedef Matrix<int> MatrixI;
 } // namespace MWP
 
+/**
+ * @brief Transpose the current matrix
+ *
+ * Transpose operation, all the row elements turn into column elements and
+ * vice versa
+ *
+ * @return Matrix<T> Transposed matrix
+ */
 template <typename T>
-inline MWP::Matrix<T> Transpose(const MWP::Matrix<T> &matrix) {
+inline MWP::Matrix<T> TransposeMatrix(const MWP::Matrix<T> &matrix) {
   MWP::Matrix<T> transposedMatrix(matrix._columns, matrix._rows);
   for (int i = 0; i < transposedMatrix._rows; i++) {
     for (int j = 0; j < transposedMatrix._columns; j++) {
@@ -217,4 +238,31 @@ inline MWP::Matrix<T> Transpose(const MWP::Matrix<T> &matrix) {
     }
   }
   return transposedMatrix;
+}
+
+/**
+ * @brief Creates an identity matrix
+ *
+ * Returns a matrix where all the elements in the main diagonal are one.
+ *
+ * @tparam T The type of the matrix elements.
+ * @param rows Number of rows.
+ * @param columns Number of columns.
+ * @return MWP::Matrix<T> The identity matrix.
+ */
+template <typename T>
+inline MWP::Matrix<T> IdentityMatrix(unsigned int rows, unsigned int columns) {
+  if (rows != columns) {
+    throw std::runtime_error("An identity matrix should have number of rows "
+                             "equal to the number of columns");
+  }
+  MWP::Matrix<T> identityMatrix(rows, columns);
+  for (int i = 0; i < identityMatrix._rows; i++) {
+    for (int j = 0; j < identityMatrix._columns; j++) {
+      if (i == j) {
+        identityMatrix._elements[i * identityMatrix._columns + j] = (T)1;
+      }
+    }
+  }
+  return identityMatrix;
 }
