@@ -27,7 +27,15 @@ public:
    * The forward substitition algorithm will solve lower triangular linear
    * systems.
    */
-  void ForwardSubstitution();
+  void solveForwardSubstitution();
+
+  /**
+   * @brief Linear System solver with the back substitution algorithm
+   *
+   * The forward substitition algorithm will solve upper triangular linear
+   * systems.
+   */
+  void solveBackSubstitution();
 };
 typedef LinSys<double> LinSysD;
 typedef LinSys<int> LinSysI;
