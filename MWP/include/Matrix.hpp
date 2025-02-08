@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
+#include <cmath>
 
 namespace MWP {
 template <typename T> class Matrix {
@@ -156,6 +157,7 @@ public:
    * multiplication.
    */
   Vector<T> operator*(const Vector<T> &vector) const;
+  
 
   // TODO: Implement
   double det() const;
@@ -215,10 +217,66 @@ public:
    * upper triangular matrix
    */
   std::pair<Matrix<double>, Matrix<double>> LUDecomposition();
+ 
+  
+  /**
+   * @brief Returns the requested submatrix.
+   *
+   * Produces a new matrix that is a submatrix of the calling object.
+   *
+   * @tparam T The type of the matrix elements.
+   * @param startRow Initial row.
+   * @param startCol Initial col.
+   * @param endRow Final row.
+   * @param endCol Final col.
+   * @return A new Matrix object that is a submatrix of this one.
+   */
+  MWP::Matrix<T> subMatrix(unsigned int startRow, unsigned int endRow, unsigned int startCol, unsigned int endCol) const;
+  
+  /**
+   * @brief Replaces a submatrix of the current matrix with another smaller matrix.
+   *
+   * This method replaces a portion of the current matrix (starting at the specified
+   * row and column indices) with the elements of the smaller matrix.
+   *
+   * @param smallerMatrix The smaller matrix to insert into the current matrix.
+   * @param startRow The starting row index in the current matrix.
+   * @param startCol The starting column index in the current matrix.
+   * @throws std::out_of_range If the smaller matrix does not fit within the bounds
+   *         of the current matrix at the specified starting indices.
+   */
+  void replaceSubmatrix(const Matrix<T>& smallerMatrix, unsigned int startRow, unsigned int startCol);
+  
+  /**
+   * @brief Get the largest column number in modulo.
+   *
+   * @param col Index of the target column.
+   * @return Largest number of the column in module.
+   * @throws std::out_of_range If the col index is out of bounds.
+   */
+  T colMax(unsigned int col) const;
+  
+  /**
+   * @brief Norm2 of the matrix.
+   *
+   * @return Norm of matrix.
+   */
+  T norm2() const;
+  
+  /**
+   * @brief QR decomposition of a mxn matrix.
+   * 
+   * @return An orthogonal vector Q and an upper triangular vector R.
+   *
+   */
+  std::pair<Matrix<T>,Matrix<T>> QRdecomp() const;
+  
 };
 typedef Matrix<double> MatrixD;
 typedef Matrix<int> MatrixI;
 } // namespace MWP
+
+
 
 /**
  * @brief Transpose the current matrix
@@ -265,6 +323,47 @@ inline MWP::Matrix<T> IdentityMatrix(unsigned int rows, unsigned int columns) {
     }
   }
   return identityMatrix;
+}
+
+/**
+ * @brief Evaluate the nth householder submatrix
+ *
+ * Zeros out all columns below the nth diagonal element
+ *
+ * @param A Matrix to be zeroed
+ * @return [A,u] Pair.
+ */
+
+template <typename T>
+inline std::pair<MWP::Matrix<T>,MWP::Matrix<T>> hh(const MWP::Matrix<T> &A){
+
+  MWP::Matrix<T> A_star = A;
+  MWP::Matrix<T> x = A_star.subMatrix(0,A_star._rows,0,1);//column vector
+  MWP::Matrix<T> hu;
+  T beta;
+  T maxVal = x.colMax(0);
+  x = x*((T)1.0f/maxVal);
+  
+  T colNorm = x.norm2();
+  hu = x;
+  if(hu[0]>=0){
+    hu[0] = hu[0] + colNorm;
+  }
+  else{
+    hu[0] = hu[0] - colNorm;
+  }
+  
+  T huNorm = hu.norm2();
+  
+  if(huNorm >= 10e-17){
+    beta = (T)2.f/(huNorm*huNorm);
+  }
+  else{
+    beta = (T)0.f;
+  }
+  
+  A_star = A_star - (hu*beta)*(TransposeMatrix(hu)*A_star);
+  return {A_star,hu};
 }
 
 template <typename T>
