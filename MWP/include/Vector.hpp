@@ -108,9 +108,35 @@ public:
    * multiplication.
    */
   Vector<T> operator*(T scalar) const;
+
+  /**
+   * @brief Overloads the multiplication operator for Vector objects.
+   *
+   * This operator allows for the multiplication of two Vector objects.
+   *
+   * @tparam T The type of the vector elements.
+   * @param vector The vector to be multiplied by the current vector.
+   * @return A new Vector object that is the result of the vector
+   * multiplication.
+   */
+  Vector<T> operator*(const Vector<T> &vector) const;
+
+ /**
+  * @brief Computes the projection of the current vector onto another vector.
+  * 
+  * @param vector The vector onto which the current vector is projected.
+  * @return Vector<T> A new vector representing the projection of the current vector onto the input vector.
+  */
+  Vector<T> projectedOnto(const Vector<T> &vector);
 };
 
 typedef Vector<double> VectorD;
 typedef Vector<int> VectorI;
-
 } // namespace MWP
+
+template <typename T>
+inline MWP::Vector<T> transposeVector(const MWP::Vector<T> &vector) {
+  MWP::Vector<T> transposedVector(vector._elements, vector._columns,
+                                  vector._rows);
+  return transposedVector;
+}

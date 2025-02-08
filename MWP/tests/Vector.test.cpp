@@ -104,4 +104,35 @@ TEST_CASE("Tests the vectos class and its functionalities") {
     CHECK(vectorIRes1[1] == 9);
     CHECK(vectorIRes1[2] == 12);
   }
+  SUBCASE("Should multiply a vector by another vector") {
+    SUBCASE("Should not multiply a vector by another vector with incompatible "
+            "dimensions for multiplication operation") {
+      MWP::VectorD vector1D({1.0f, 2.0f}, 1, 2);
+      MWP::VectorD vector2D({1.0f}, 1, 1);
+      CHECK_THROWS_WITH_AS(
+          vector1D * vector2D,
+          "Invalid dimensions for vector-vector multiplication",
+          std::runtime_error);
+    }
+    MWP::VectorD vector1D({1.0f, 2.0f, 3.0f}, 1, 3);
+    MWP::VectorD vector2D({1.0f, 2.0f, 3.0f}, 3, 1);
+    MWP::VectorD vectorDRes = vector1D * vector2D;
+    CHECK(vectorDRes[0] == 14.0f);
+  }
+  SUBCASE("Should project a vector onto another vector") {
+    SUBCASE("Should not project a vector onto another vector if the current "
+            "vector have number of column different from 1") {
+      MWP::VectorD vectorD1({4.0f, 3.0f}, 2, 1);
+      MWP::VectorD vectorD2({2.0f, 8.0f}, 1, 2);
+      CHECK_THROWS_WITH_AS(
+          vectorD1.projectedOnto(vectorD2),
+          "Invalid vectors dimensions for projection operation",
+          std::runtime_error);
+    }
+    MWP::VectorD vectorD1({4.0f, 3.0f}, 2, 1);
+    MWP::VectorD vectorD2({2.0f, 8.0f}, 2, 1);
+    MWP::VectorD vectorDRes = vectorD1.projectedOnto(vectorD2);
+    CHECK(vectorDRes[0] == (double)16 / 17);
+    CHECK(vectorDRes[1] == (double)64 / 17);
+  }
 }

@@ -40,3 +40,9 @@ public:
 typedef LinSys<double> LinSysD;
 typedef LinSys<int> LinSysI;
 } // namespace MWP
+
+template <typename T>
+inline MWP::Vector<T> rest(MWP::Vector<T> linearSysResult,
+                           MWP::Vector<T> constants) {
+  return linearSysResult - constants;
+}

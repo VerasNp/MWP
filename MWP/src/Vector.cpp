@@ -1,4 +1,5 @@
 #include "Vector.hpp"
+#include <iostream>
 #include <stdexcept>
 
 using namespace MWP;
@@ -96,6 +97,34 @@ template <typename T> Vector<T> Vector<T>::operator*(T scalar) const {
     result._elements[i] = this->_elements[i] * scalar;
   }
   return result;
+}
+
+template <typename T>
+Vector<T> Vector<T>::operator*(const Vector<T> &vector) const {
+  if (this->_columns != vector._rows) {
+    throw std::runtime_error(
+        "Invalid dimensions for vector-vector multiplication");
+  }
+  Vector<T> result(this->_rows, vector._columns);
+  for (int i = 0; i < this->_rows; i++) {
+    result[i] = (T)0;
+    for (int j = 0; j < this->_columns; j++) {
+      result[i] += this->_elements[i * this->_columns + j] * vector[j];
+    }
+  }
+  return result;
+}
+
+template <typename T>
+Vector<T> Vector<T>::projectedOnto(const Vector<T> &vector) {
+  if (vector._columns != 1) {
+    throw std::runtime_error(
+        "Invalid vectors dimensions for projection operation");
+  }
+  Vector<T> transposedVector = transposeVector(vector);
+  Vector<T> projectionVector =
+      vector * ((transposedVector * *this)[0] / (transposedVector * vector)[0]);
+  return projectionVector;
 }
 
 template class MWP::Vector<double>;

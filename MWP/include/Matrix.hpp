@@ -266,3 +266,10 @@ inline MWP::Matrix<T> IdentityMatrix(unsigned int rows, unsigned int columns) {
   }
   return identityMatrix;
 }
+
+template <typename T>
+inline std::pair<MWP::MatrixD, MWP::MatrixD> GS(const MWP::Matrix<T> &matrix) {
+  // TODO: Check if columns are L.I
+  MWP::Matrix<T> QMatrix(matrix._rows, matrix._columns);
+  MWP::Matrix<T> RMatrix(matrix._rows, matrix._columns);
+}
