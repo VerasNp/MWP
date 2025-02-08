@@ -226,5 +226,81 @@ std::pair<MatrixD, MatrixD> Matrix<T>::LUDecomposition() {
   return std::pair<MatrixD, MatrixD>{LMatrix, UMatrix};
 }
 
+template <typename T>
+MWP::Matrix<T> MWP::Matrix<T>::subMatrix(unsigned int startRow, unsigned int endRow, unsigned int startCol, unsigned int endCol) const {
+  if (startRow >= endRow || startCol >= endCol || endRow > _rows || endCol > _columns) {
+    throw std::out_of_range("Invalid submatrix range");
+  }
+
+  unsigned int subRows = endRow - startRow;
+  unsigned int subCols = endCol - startCol;
+  std::vector<T> subElements(subRows * subCols);
+
+  for (unsigned int i = startRow; i < endRow; i++) {
+    for (unsigned int j = startCol; j < endCol; j++) {
+      subElements[(i - startRow) * subCols + (j - startCol)] = _elements[i * _columns + j];
+    }
+  }
+
+  return Matrix<T>(subElements, subRows, subCols);
+}
+
+template <typename T>
+void MWP::Matrix<T>::replaceSubmatrix(const Matrix<T>& smallerMatrix, unsigned int startRow, unsigned int startCol) {
+  if (startRow + smallerMatrix._rows > _rows || startCol + smallerMatrix._columns > _columns) {
+    throw std::out_of_range("Smaller matrix does not fit within the larger matrix at the specified indices.");
+  }
+
+  for (unsigned int i = 0; i < smallerMatrix._rows; i++) {
+    for (unsigned int j = 0; j < smallerMatrix._columns; j++) {
+      unsigned int largerIndex = (startRow + i) * _columns + (startCol + j);
+      _elements[largerIndex] = smallerMatrix(i, j);
+    }
+  }
+}
+
+template <typename T>
+T MWP::Matrix<T>::colMax(unsigned int col) const{
+  if(col >= _columns){
+    throw std::out_of_range("Out of range column.");
+  }
+  T max = std::abs(this->operator()(0,col));
+  T current;
+  for(int i = 1; i < _rows; i++){
+    current = std::abs(this->operator()(i,col));
+    if(current > max){
+      max = current;
+    }
+  }
+  return max;
+}
+
+template <typename T>
+T MWP::Matrix<T>::norm2() const{
+  T sum = 0;
+  for(T e : _elements){
+    sum+=(e*e);
+  }
+  return std::sqrt(sum);
+}
+
+template <typename T>
+std::pair<MWP::Matrix<T>,MWP::Matrix<T>> MWP::Matrix<T>::QRdecomp() const{
+  MWP::Matrix<T> R = *this;
+  MWP::Matrix<T> Q = IdentityMatrix<T>(this->_rows,this->_rows);
+  unsigned int k = std::min(this->_rows-1,this->_columns);
+  std::pair<MWP::Matrix<T>,MWP::Matrix<T>> ru;
+  for(int i = 0; i < k;i++){
+    ru = hh(R.subMatrix(i,R._rows,i,R._columns));
+    R.replaceSubmatrix(ru.first,i,i);
+    Matrix<T> uh = ru.second;
+    T uhNorm = uh.norm2();
+    Matrix<T> qsub = Q.subMatrix(0,Q._rows,i,Q._columns);
+    Matrix<T> qres = qsub - (qsub*(2.f/(uhNorm*uhNorm)))*(uh*TransposeMatrix<T>(uh));   //qsub - qumul;
+    Q.replaceSubmatrix(qres,0,i);
+  }
+  return {Q,R};
+}
+
 template class MWP::Matrix<double>;
 template class MWP::Matrix<int>;
