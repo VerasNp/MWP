@@ -6,7 +6,15 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
-
+void printMatrix(MWP::Matrix<double> m){
+  for(int i= 0;i<m._rows;i++){
+    for(int j=0;j<m._columns;j++){
+      std::cout<<m(i,j) << " ";
+    }
+    std::cout << "\n";
+  }
+  std::cout << "\n";
+}
 TEST_CASE("Tests the matrix class") {
   SUBCASE("Should init a matrix with default values, 0 dimension (columns and "
           "rows) and no component") {
@@ -305,5 +313,67 @@ TEST_CASE("Tests the matrix class") {
     CHECK(typeid(toVectorMatrixD).name() == typeid(MWP::VectorD).name());
     CHECK(matrixD._rows == toVectorMatrixD._rows);
     CHECK(matrixD._columns == toVectorMatrixD._columns);
+  }
+
+  
+  SUBCASE("HouseHolder Q*R=A") {
+    MWP::MatrixD matrix({1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
+                        3, 3);
+
+    std::pair<MWP::MatrixD, MWP::MatrixD> dc = matrix.QRdecomp();  
+    MWP::MatrixD mul = dc.first*dc.second;
+    CHECK(doctest::Approx(mul(0,0)) == matrix(0,0));
+    CHECK(doctest::Approx(mul(0,1)) == matrix(0,1));
+    CHECK(doctest::Approx(mul(0,2)) == matrix(0,2));
+    CHECK(doctest::Approx(mul(1,0)) == matrix(1,0));
+    CHECK(doctest::Approx(mul(1,1)) == matrix(1,1));
+    CHECK(doctest::Approx(mul(1,2)) == matrix(1,2));
+    CHECK(doctest::Approx(mul(2,0)) == matrix(2,0));
+    CHECK(doctest::Approx(mul(2,1)) == matrix(2,1));
+    CHECK(doctest::Approx(mul(2,2)) == matrix(2,2));
+
+  }
+  
+  SUBCASE("HouseHolder Q should be orthogonal") {
+    MWP::MatrixD matrix({1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
+                        3, 3);
+
+    std::pair<MWP::MatrixD, MWP::MatrixD> dc = matrix.QRdecomp();  
+    MWP::MatrixD id = IdentityMatrix<double>(3,3);
+    MWP::MatrixD qt = TransposeMatrix<double>(dc.first);
+
+    CHECK(doctest::Approx((qt*dc.first)(0,0)) == id(0,0));
+    CHECK(doctest::Approx((qt*dc.first)(0,1)) == id(0,1));
+    CHECK(doctest::Approx((qt*dc.first)(0,2)) == id(0,2));
+    CHECK(doctest::Approx((qt*dc.first)(1,0)) == id(1,0));
+    CHECK(doctest::Approx((qt*dc.first)(1,1)) == id(1,1));
+    CHECK(doctest::Approx((qt*dc.first)(1,2)) == id(1,2));
+    CHECK(doctest::Approx((qt*dc.first)(2,0)) == id(2,0));
+    CHECK(doctest::Approx((qt*dc.first)(2,1)) == id(2,1));
+    CHECK(doctest::Approx((qt*dc.first)(2,2)) == id(2,2));
+    
+    CHECK(doctest::Approx((dc.first*qt)(0,0)) == id(0,0));
+    CHECK(doctest::Approx((dc.first*qt)(0,1)) == id(0,1));
+    CHECK(doctest::Approx((dc.first*qt)(0,2)) == id(0,2));
+    CHECK(doctest::Approx((dc.first*qt)(1,0)) == id(1,0));
+    CHECK(doctest::Approx((dc.first*qt)(1,1)) == id(1,1));
+    CHECK(doctest::Approx((dc.first*qt)(1,2)) == id(1,2));
+    CHECK(doctest::Approx((dc.first*qt)(2,0)) == id(2,0));
+    CHECK(doctest::Approx((dc.first*qt)(2,1)) == id(2,1));
+    CHECK(doctest::Approx((dc.first*qt)(2,2)) == id(2,2));
+    
+    MWP::MatrixD c0 =  dc.first.subMatrix(0,dc.first._rows,0,1);
+    MWP::MatrixD c1 =  dc.first.subMatrix(0,dc.first._rows,1,2);
+    MWP::MatrixD c2 =  dc.first.subMatrix(0,dc.first._rows,2,3);
+    
+    MWP::VectorD v0 = toVector(c0);
+    MWP::VectorD v1 = toVector(c1);
+    MWP::VectorD v2 = toVector(c2);
+    
+    CHECK(doctest::Approx(Dot(v0,v1)) == 0.0);
+    CHECK(doctest::Approx(Dot(v0,v2)) == 0.0);
+    CHECK(doctest::Approx(Dot(v1,v2)) == 0.0);
+    
+
   }
 }
