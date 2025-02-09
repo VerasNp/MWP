@@ -6,15 +6,7 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
-void printMatrix(MWP::Matrix<double> m){
-  for(int i= 0;i<m._rows;i++){
-    for(int j=0;j<m._columns;j++){
-      std::cout<<m(i,j) << " ";
-    }
-    std::cout << "\n";
-  }
-  std::cout << "\n";
-}
+
 TEST_CASE("Tests the matrix class") {
   SUBCASE("Should init a matrix with default values, 0 dimension (columns and "
           "rows) and no component") {
