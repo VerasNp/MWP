@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
+#include <limits>
 
 namespace MWP {
 template <typename T> class Matrix {
@@ -353,7 +354,7 @@ inline std::pair<MWP::Matrix<T>, MWP::Matrix<T>> hh(const MWP::Matrix<T> &A) {
 
   T huNorm = hu.norm2();
 
-  if (huNorm >= 10e-17) {
+  if (huNorm >= std::numeric_limits<double>::epsilon()) {
     beta = (T)2.f / (huNorm * huNorm);
   } else {
     beta = (T)0.f;
