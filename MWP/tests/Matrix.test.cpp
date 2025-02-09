@@ -1,6 +1,8 @@
 #include "Matrix.hpp"
 #include "Vector.hpp"
 #include "doctest/doctest.h"
+#include <cmath>
+#include <iostream>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -217,7 +219,7 @@ TEST_CASE("Tests the matrix class") {
   SUBCASE("Should decompose a matrix into LU matrices") {
     SUBCASE("Should not decompose a matrix into LU matrices if the matrix is "
             "not a square matrix") {
-              MWP::MatrixI matrix({1, 4}, 1, 2);
+      MWP::MatrixI matrix({1, 4}, 1, 2);
       CHECK_THROWS_WITH_AS(
           matrix.LUDecomposition(),
           "The matrix should be square to be decomposed into LU matrices!",
@@ -247,18 +249,18 @@ TEST_CASE("Tests the matrix class") {
   }
   SUBCASE("Should replace a submatrix") {
     SUBCASE("Should not get a out of bounds submatrix") {
-              MWP::MatrixI matrixMajor({1, 4, 3, 5, 
-                                        2, 1, 7, 8, 
-                                        9 ,1 , 2, 5 , 
-                                        6, 2 , 1, 7}, 4, 4
-                                      );
+      MWP::MatrixI matrixMajor({1, 4, 3, 5, 2, 1, 7, 8, 9, 1, 2, 5, 6, 2, 1, 7},
+                               4, 4);
 
-      CHECK_THROWS_WITH_AS( matrixMajor.subMatrix(2,5,0,2),"Invalid submatrix range", std::out_of_range);
-      CHECK_THROWS_WITH_AS(matrixMajor.subMatrix(0,2,2,5),"Invalid submatrix range",std::out_of_range);
-      CHECK_THROWS_WITH_AS(matrixMajor.subMatrix(2,0,2,0),"Invalid submatrix range",std::out_of_range);
+      CHECK_THROWS_WITH_AS(matrixMajor.subMatrix(2, 5, 0, 2),
+                           "Invalid submatrix range", std::out_of_range);
+      CHECK_THROWS_WITH_AS(matrixMajor.subMatrix(0, 2, 2, 5),
+                           "Invalid submatrix range", std::out_of_range);
+      CHECK_THROWS_WITH_AS(matrixMajor.subMatrix(2, 0, 2, 0),
+                           "Invalid submatrix range", std::out_of_range);
     }
     MWP::MatrixI matrix({1, 4, -3, -2, 8, 5, 3, 4, 7}, 3, 3);
-    MWP::MatrixI subM = matrix.subMatrix(0,2,0,2);
+    MWP::MatrixI subM = matrix.subMatrix(0, 2, 0, 2);
     CHECK(subM(0, 0) == 1);
     CHECK(subM(0, 1) == 4);
     CHECK(subM(1, 0) == -2);
@@ -266,13 +268,42 @@ TEST_CASE("Tests the matrix class") {
     CHECK(subM.isSquare() == true);
     CHECK(subM._rows == 2);
     CHECK(subM._columns == 2);
-    
-    MWP::MatrixI col = matrix.subMatrix(0,matrix._rows,1,2);
+
+    MWP::MatrixI col = matrix.subMatrix(0, matrix._rows, 1, 2);
     CHECK(col(0, 0) == 4);
     CHECK(col(1, 0) == 8);
     CHECK(col(2, 0) == 4);
     CHECK(col._rows == 3);
     CHECK(col._columns == 1);
   }
+  SUBCASE("Should apply Gram-Schmidt process") {
+    MWP::MatrixD matrix({1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
+                        3, 3);
+    std::pair<MWP::MatrixD, MWP::MatrixD> GSQRDecomposition = GS(matrix);
+    CHECK(GSQRDecomposition.first(0, 0) == doctest::Approx(1 / std::sqrt(2)));
+    CHECK(GSQRDecomposition.first(0, 1) == doctest::Approx(1 / std::sqrt(6)));
+    CHECK(GSQRDecomposition.first(0, 2) == doctest::Approx(-1 / std::sqrt(3)));
+    CHECK(GSQRDecomposition.first(1, 0) == doctest::Approx(1 / std::sqrt(2)));
+    CHECK(GSQRDecomposition.first(1, 1) == doctest::Approx(-1 / std::sqrt(6)));
+    CHECK(GSQRDecomposition.first(1, 2) == doctest::Approx(1 / std::sqrt(3)));
+    CHECK(GSQRDecomposition.first(2, 0) == 0.0f);
+    CHECK(GSQRDecomposition.first(2, 1) == doctest::Approx(2 / std::sqrt(6)));
+    CHECK(GSQRDecomposition.first(2, 2) == doctest::Approx(1 / std::sqrt(3)));
+    CHECK(GSQRDecomposition.second(0, 0) == doctest::Approx(2 / std::sqrt(2)));
+    CHECK(GSQRDecomposition.second(0, 1) == doctest::Approx(1 / std::sqrt(2)));
+    CHECK(GSQRDecomposition.second(0, 2) == doctest::Approx(1 / std::sqrt(2)));
+    CHECK(GSQRDecomposition.second(1, 0) == 0.0f);
+    CHECK(GSQRDecomposition.second(1, 1) == doctest::Approx(3 / std::sqrt(6)));
+    CHECK(GSQRDecomposition.second(1, 2) == doctest::Approx(1 / std::sqrt(6)));
+    CHECK(GSQRDecomposition.second(2, 0) == 0.0f);
+    CHECK(GSQRDecomposition.second(2, 1) == 0.0f);
+    CHECK(GSQRDecomposition.second(2, 2) == doctest::Approx(2 / std::sqrt(3)));
+  }
+  SUBCASE("Should transform a valid Matrix object into a Vector object") {
+    MWP::MatrixD matrixD({1.0f, 2.0f, 3.0f}, 3, 1);
+    MWP::VectorD toVectorMatrixD = toVector(matrixD);
+    CHECK(typeid(toVectorMatrixD).name() == typeid(MWP::VectorD).name());
+    CHECK(matrixD._rows == toVectorMatrixD._rows);
+    CHECK(matrixD._columns == toVectorMatrixD._columns);
+  }
 }
-

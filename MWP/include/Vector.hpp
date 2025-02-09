@@ -5,6 +5,8 @@
 
 namespace MWP {
 
+template <typename T> class Matrix;
+
 template <typename T> class Vector {
 public:
   std::vector<T> _elements;
@@ -47,7 +49,6 @@ public:
    * @param columns The number of columns in the vector.
    */
   Vector(std::vector<T> elements, unsigned int rows, unsigned int columns);
-
 public:
   /**
    * @brief Access the vector components by index
@@ -121,13 +122,21 @@ public:
    */
   Vector<T> operator*(const Vector<T> &vector) const;
 
- /**
-  * @brief Computes the projection of the current vector onto another vector.
-  * 
-  * @param vector The vector onto which the current vector is projected.
-  * @return Vector<T> A new vector representing the projection of the current vector onto the input vector.
-  */
+  /**
+   * @brief Computes the projection of the current vector onto another vector.
+   *
+   * @param vector The vector onto which the current vector is projected.
+   * @return Vector<T> A new vector representing the projection of the current
+   * vector onto the input vector.
+   */
   Vector<T> projectedOnto(const Vector<T> &vector);
+
+  /**
+   * @brief
+   *
+   * @return double
+   */
+  double norm2() const;
 };
 
 typedef Vector<double> VectorD;
@@ -139,4 +148,19 @@ inline MWP::Vector<T> transposeVector(const MWP::Vector<T> &vector) {
   MWP::Vector<T> transposedVector(vector._elements, vector._columns,
                                   vector._rows);
   return transposedVector;
+}
+
+template <typename T>
+inline T Dot(const MWP::Vector<T> &vector1, const MWP::Vector<T> &vector2) {
+  // TODO: Check compatibility
+  T sum = (T)0;
+  for (int i = 0; i < vector1._size; i++) {
+    sum += vector1._elements[i] * vector2._elements[i];
+  }
+  return sum;
+}
+
+template <typename T>
+inline MWP::Matrix<T> toMatrix(const MWP::Vector<T> &vector) {
+  return MWP::Matrix<T>(vector._elements, vector._rows, vector._columns);
 }

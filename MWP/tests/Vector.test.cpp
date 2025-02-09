@@ -1,4 +1,5 @@
 #include "Vector.hpp"
+#include "Matrix.hpp"
 #include "doctest/doctest.h"
 #include <stdexcept>
 
@@ -134,5 +135,26 @@ TEST_CASE("Tests the vectos class and its functionalities") {
     MWP::VectorD vectorDRes = vectorD1.projectedOnto(vectorD2);
     CHECK(vectorDRes[0] == (double)16 / 17);
     CHECK(vectorDRes[1] == (double)64 / 17);
+  }
+  SUBCASE("Should return the norm 2 of a vector") {
+    MWP::VectorD vectorD({4.0f, 3.0f}, 2, 1);
+    double norm2D = vectorD.norm2();
+    CHECK(norm2D == 5.0f);
+    MWP::VectorI vectorI({4, 3}, 2, 1);
+    double norm2I = vectorI.norm2();
+    CHECK(norm2I == 5.0f);
+  }
+  SUBCASE("Should calculate the dot product between two vectors") {
+    MWP::VectorD vectorD1({4.0f, 3.0f}, 1, 2);
+    MWP::VectorD vectorD2({4.0f, 3.0f}, 2, 1);
+    double dotProduct = Dot(vectorD1, vectorD2);
+    CHECK(dotProduct == 25.0f);
+  }
+  SUBCASE("Should transform a valid Vector object into a Matrix object") {
+    MWP::VectorD vectorD({1.0f, 2.0f, 3.0f}, 3, 1);
+    MWP::MatrixD toMatrixVectorD = toMatrix(vectorD);
+    CHECK(typeid(toMatrixVectorD).name() == typeid(MWP::MatrixD).name());
+    CHECK(vectorD._rows == toMatrixVectorD._rows);
+    CHECK(vectorD._columns == toMatrixVectorD._columns);
   }
 }

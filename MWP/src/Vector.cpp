@@ -1,5 +1,5 @@
 #include "Vector.hpp"
-#include <iostream>
+#include <cmath>
 #include <stdexcept>
 
 using namespace MWP;
@@ -125,6 +125,14 @@ Vector<T> Vector<T>::projectedOnto(const Vector<T> &vector) {
   Vector<T> projectionVector =
       vector * ((transposedVector * *this)[0] / (transposedVector * vector)[0]);
   return projectionVector;
+}
+
+template <typename T> double Vector<T>::norm2() const {
+  double sum = 0.0f;
+  for (T element : this->_elements) {
+    sum += std::pow(element, 2);
+  }
+  return std::sqrt(sum);
 }
 
 template class MWP::Vector<double>;

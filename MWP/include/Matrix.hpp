@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Vector.hpp"
+#include <cmath>
+#include <iostream>
 #include <stdexcept>
 #include <utility>
 #include <vector>
-#include <cmath>
 
 namespace MWP {
 template <typename T> class Matrix {
@@ -157,7 +158,6 @@ public:
    * multiplication.
    */
   Vector<T> operator*(const Vector<T> &vector) const;
-  
 
   // TODO: Implement
   double det() const;
@@ -217,8 +217,7 @@ public:
    * upper triangular matrix
    */
   std::pair<Matrix<double>, Matrix<double>> LUDecomposition();
- 
-  
+
   /**
    * @brief Returns the requested submatrix.
    *
@@ -231,22 +230,25 @@ public:
    * @param endCol Final col.
    * @return A new Matrix object that is a submatrix of this one.
    */
-  MWP::Matrix<T> subMatrix(unsigned int startRow, unsigned int endRow, unsigned int startCol, unsigned int endCol) const;
-  
+  MWP::Matrix<T> subMatrix(unsigned int startRow, unsigned int endRow,
+                           unsigned int startCol, unsigned int endCol) const;
+
   /**
-   * @brief Replaces a submatrix of the current matrix with another smaller matrix.
+   * @brief Replaces a submatrix of the current matrix with another smaller
+   * matrix.
    *
-   * This method replaces a portion of the current matrix (starting at the specified
-   * row and column indices) with the elements of the smaller matrix.
+   * This method replaces a portion of the current matrix (starting at the
+   * specified row and column indices) with the elements of the smaller matrix.
    *
    * @param smallerMatrix The smaller matrix to insert into the current matrix.
    * @param startRow The starting row index in the current matrix.
    * @param startCol The starting column index in the current matrix.
-   * @throws std::out_of_range If the smaller matrix does not fit within the bounds
-   *         of the current matrix at the specified starting indices.
+   * @throws std::out_of_range If the smaller matrix does not fit within the
+   * bounds of the current matrix at the specified starting indices.
    */
-  void replaceSubmatrix(const Matrix<T>& smallerMatrix, unsigned int startRow, unsigned int startCol);
-  
+  void replaceSubmatrix(const Matrix<T> &smallerMatrix, unsigned int startRow,
+                        unsigned int startCol);
+
   /**
    * @brief Get the largest column number in modulo.
    *
@@ -255,28 +257,25 @@ public:
    * @throws std::out_of_range If the col index is out of bounds.
    */
   T colMax(unsigned int col) const;
-  
+
   /**
    * @brief Norm2 of the matrix.
    *
    * @return Norm of matrix.
    */
   T norm2() const;
-  
+
   /**
    * @brief QR decomposition of a mxn matrix.
-   * 
+   *
    * @return An orthogonal vector Q and an upper triangular vector R.
    *
    */
-  std::pair<Matrix<T>,Matrix<T>> QRdecomp() const;
-  
+  std::pair<Matrix<T>, Matrix<T>> QRdecomp() const;
 };
 typedef Matrix<double> MatrixD;
 typedef Matrix<int> MatrixI;
 } // namespace MWP
-
-
 
 /**
  * @brief Transpose the current matrix
@@ -335,40 +334,66 @@ inline MWP::Matrix<T> IdentityMatrix(unsigned int rows, unsigned int columns) {
  */
 
 template <typename T>
-inline std::pair<MWP::Matrix<T>,MWP::Matrix<T>> hh(const MWP::Matrix<T> &A){
+inline std::pair<MWP::Matrix<T>, MWP::Matrix<T>> hh(const MWP::Matrix<T> &A) {
 
   MWP::Matrix<T> A_star = A;
-  MWP::Matrix<T> x = A_star.subMatrix(0,A_star._rows,0,1);//column vector
+  MWP::Matrix<T> x = A_star.subMatrix(0, A_star._rows, 0, 1); // column vector
   MWP::Matrix<T> hu;
   T beta;
   T maxVal = x.colMax(0);
-  x = x*((T)1.0f/maxVal);
-  
+  x = x * ((T)1.0f / maxVal);
+
   T colNorm = x.norm2();
   hu = x;
-  if(hu[0]>=0){
+  if (hu[0] >= 0) {
     hu[0] = hu[0] + colNorm;
-  }
-  else{
+  } else {
     hu[0] = hu[0] - colNorm;
   }
-  
+
   T huNorm = hu.norm2();
-  
-  if(huNorm >= 10e-17){
-    beta = (T)2.f/(huNorm*huNorm);
-  }
-  else{
+
+  if (huNorm >= 10e-17) {
+    beta = (T)2.f / (huNorm * huNorm);
+  } else {
     beta = (T)0.f;
   }
-  
-  A_star = A_star - (hu*beta)*(TransposeMatrix(hu)*A_star);
-  return {A_star,hu};
+
+  A_star = A_star - (hu * beta) * (TransposeMatrix(hu) * A_star);
+  return {A_star, hu};
 }
 
 template <typename T>
-inline std::pair<MWP::MatrixD, MWP::MatrixD> GS(const MWP::Matrix<T> &matrix) {
-  // TODO: Check if columns are L.I
-  MWP::Matrix<T> QMatrix(matrix._rows, matrix._columns);
-  MWP::Matrix<T> RMatrix(matrix._rows, matrix._columns);
+inline MWP::Vector<T> toVector(const MWP::Matrix<T> &matrix) {
+  if (matrix._columns != 1 && matrix._rows != 1) {
+    throw std::runtime_error(
+        "Number of column invalid to transform Matrix into Vector object");
+  }
+  MWP::Vector<T> toVector(matrix._elements, matrix._rows, matrix._columns);
+  return toVector;
+}
+
+inline std::pair<MWP::MatrixD, MWP::MatrixD> GS(const MWP::MatrixD &Amatrix) {
+  if (Amatrix._rows < Amatrix._columns) {
+    throw std::invalid_argument("A matriz deve ter mais linhas que colunas.");
+  }
+  MWP::MatrixD QMatrix(Amatrix._rows, Amatrix._columns);
+  MWP::MatrixD RMatrix(Amatrix._columns, Amatrix._columns);
+  MWP::VectorD rowVectorA(Amatrix._rows, 1);
+  MWP::VectorD rowVectorQ(Amatrix._rows, 1);
+  for (int i = 0; i < Amatrix._columns; i++) {
+    rowVectorA = toVector(Amatrix.subMatrix(0, Amatrix._rows, i, i + 1));
+    for (int j = 0; j < i; j++) {
+      rowVectorQ = toVector(QMatrix.subMatrix(0, QMatrix._rows, j, j + 1));
+      double dotProduct =
+          Dot(rowVectorA, rowVectorQ);
+      RMatrix(j, i) = dotProduct;
+      rowVectorA = rowVectorA - rowVectorQ * dotProduct;
+    }
+    double norm = rowVectorA.norm2();
+    rowVectorQ = rowVectorA * (1.0 / norm);
+    QMatrix.replaceSubmatrix(toMatrix(rowVectorQ), 0, i);
+    RMatrix(i, i) = norm;
+  }
+  return std::pair<MWP::MatrixD, MWP::MatrixD>(QMatrix, RMatrix);
 }
