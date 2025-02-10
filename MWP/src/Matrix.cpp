@@ -309,5 +309,22 @@ std::pair<MWP::Matrix<T>, MWP::Matrix<T>> MWP::Matrix<T>::QRdecomp() const {
   return {Q, R};
 }
 
+template <typename T>
+double
+MWP::Matrix<T>::eigtenValue(EigtenValueNumericMethod eigtenValueNumericMethod) {
+  if (eigtenValueNumericMethod == POWER_METHOD) {
+    return powerMethodEigtenValue();
+  } else if (eigtenValueNumericMethod == QR) {
+    return qrMethodEigtenValue();
+  } else {
+    throw std::runtime_error("Unknown numeric method to find eigten value");
+  }
+}
+
+template<typename T>
+double MWP::Matrix<T>::powerMethodEigtenValue(){
+  MWP
+}
+
 template class MWP::Matrix<double>;
 template class MWP::Matrix<int>;

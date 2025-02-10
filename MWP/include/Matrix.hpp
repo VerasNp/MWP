@@ -3,10 +3,11 @@
 #include "Vector.hpp"
 #include <cmath>
 #include <iostream>
+#include <limits>
+#include <random>
 #include <stdexcept>
 #include <utility>
 #include <vector>
-#include <limits>
 
 namespace MWP {
 template <typename T> class Matrix {
@@ -15,6 +16,8 @@ public:
   unsigned int _rows;
   unsigned int _columns;
   unsigned int _size;
+
+  enum EigtenValueNumericMethod { POWER_METHOD, QR };
 
 public:
   /**
@@ -273,6 +276,13 @@ public:
    *
    */
   std::pair<Matrix<T>, Matrix<T>> QRdecomp() const;
+
+  double eigtenValue(EigtenValueNumericMethod eigtenValueNumericMethod);
+
+private:
+  double powerMethodEigtenValue();
+
+  double qrMethodEigtenValue();
 };
 typedef Matrix<double> MatrixD;
 typedef Matrix<int> MatrixI;
@@ -386,8 +396,7 @@ inline std::pair<MWP::MatrixD, MWP::MatrixD> GS(const MWP::MatrixD &Amatrix) {
     rowVectorA = toVector(Amatrix.subMatrix(0, Amatrix._rows, i, i + 1));
     for (int j = 0; j < i; j++) {
       rowVectorQ = toVector(QMatrix.subMatrix(0, QMatrix._rows, j, j + 1));
-      double dotProduct =
-          Dot(rowVectorA, rowVectorQ);
+      double dotProduct = Dot(rowVectorA, rowVectorQ);
       RMatrix(j, i) = dotProduct;
       rowVectorA = rowVectorA - rowVectorQ * dotProduct;
     }
@@ -397,4 +406,35 @@ inline std::pair<MWP::MatrixD, MWP::MatrixD> GS(const MWP::MatrixD &Amatrix) {
     RMatrix(i, i) = norm;
   }
   return std::pair<MWP::MatrixD, MWP::MatrixD>(QMatrix, RMatrix);
+}
+
+template <typename T>
+inline MWP::Matrix<T> RandomSymetricMatrix(unsigned int rows,
+                                           unsigned int columns, T min, T max) {
+  MWP::Matrix<T> symetricRandomMatrix(rows, columns);
+  std::mt19937 gen(42);
+  std::uniform_real_distribution<> dis(min, max);
+  for (int i = 0; i < symetricRandomMatrix._rows; i++) {
+    for (int j = 0; j < symetricRandomMatrix._columns; j++) {
+      symetricRandomMatrix._elements[i * symetricRandomMatrix._columns + j] =
+          dis(gen);
+    }
+  }
+  return symetricRandomMatrix;
+}
+
+template <typename T>
+inline MWP::Matrix<T> RandomSymetricMatrix(unsigned int rows,
+                                           unsigned int columns, T min, T max) {
+  if (rows != columns) {
+    throw std::runtime_error(
+        "Symetric matrix should be square! Invalid number of rows and columns");
+  }
+  MWP::Matrix<T> symetricRandomMatrix(rows, columns);
+  std::mt19937 gen(42);
+  std::uniform_real_distribution<> dis(min, max);
+  for (int i = 0; i < symetricRandomMatrix._size; i++) {
+    symetricRandomMatrix._elements[i] = dis(gen);
+  }
+  return symetricRandomMatrix;
 }
