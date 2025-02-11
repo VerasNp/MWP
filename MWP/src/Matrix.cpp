@@ -1,4 +1,6 @@
 #include "Matrix.hpp"
+#include <cstdlib>
+#include <iostream>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -172,16 +174,15 @@ template <typename T> Matrix<T> &Matrix<T>::transpose() {
   return *this;
 }
 
-template <typename T> bool Matrix<T>::isSquare() {
+template <typename T> bool Matrix<T>::isSquare() const {
   return this->_rows == this->_columns;
 }
 
-template <typename T> bool Matrix<T>::isLowerTriangular() {
-  if (!this->isSquare())
-    return false;
+template <typename T> bool Matrix<T>::isLowerTriangular()  const {
   for (int i = 0; i < this->_rows; i++) {
     for (int j = 0; j < this->_columns; j++) {
-      if (i < j && (this->_elements[i * this->_columns + j]) != (T)0) {
+      if (i < j && std::abs((this->_elements[i * this->_columns + j])) > 10e-10) {
+        std::cout << this->_elements[i * this->_columns + j] << '\n';
         return false;
       }
     }
@@ -189,12 +190,11 @@ template <typename T> bool Matrix<T>::isLowerTriangular() {
   return true;
 }
 
-template <typename T> bool Matrix<T>::isUpperTriangular() {
-  if (!this->isSquare())
-    return false;
+template <typename T> bool Matrix<T>::isUpperTriangular() const  {
   for (int i = 0; i < this->_rows; i++) {
     for (int j = 0; j < this->_columns; j++) {
-      if (i > j && (this->_elements[i * this->_columns + j]) != (T)0) {
+      if (i > j && std::abs((this->_elements[i * this->_columns + j])) > 10e-10) {
+        std::cout << this->_elements[i * this->_columns + j] << '\n';
         return false;
       }
     }

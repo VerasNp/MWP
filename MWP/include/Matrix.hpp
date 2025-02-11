@@ -184,7 +184,7 @@ public:
    * @return true Is a square matrix
    * @return false Is not a square matrix
    */
-  bool isSquare();
+  bool isSquare() const;
 
   /**
    * @brief Check if the matrix is lower triangular
@@ -195,7 +195,7 @@ public:
    * @return true Is a lower triangular matrix
    * @return false Is not a lower triangular matrix
    */
-  bool isLowerTriangular();
+  bool isLowerTriangular() const;
 
   /**
    * @brief Check if the matrix is upper triangular
@@ -206,7 +206,7 @@ public:
    * @return true Is a upper triangular matrix
    * @return false Is not a upper triangular matrix
    */
-  bool isUpperTriangular();
+  bool isUpperTriangular() const;
 
   /**
    * @brief Factors the matrix using lower-upper decomposition
