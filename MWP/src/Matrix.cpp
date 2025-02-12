@@ -147,7 +147,7 @@ Vector<T> Matrix<T>::operator*(const Vector<T> &vector) const {
     throw std::runtime_error(
         "Invalid dimensions for matrix-vector multiplication");
   }
-  Vector<T> result(1, this->_rows);
+  Vector<T> result(this->_rows, vector._columns);
   for (int i = 0; i < this->_rows; i++) {
     result[i] = (T)0;
     for (int j = 0; j < this->_columns; j++) {

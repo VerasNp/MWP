@@ -49,11 +49,11 @@ template <typename T> void LinSys<T>::solveBackSubstitution() {
     this->variables._elements[this->coefficients._rows - 1] =
         this->constants._elements[this->coefficients._rows - 1] /
         this->coefficients(this->coefficients._rows - 1,
-                           this->coefficients._columns - 1);
+                           this->coefficients._rows - 1);
     for (int i = this->coefficients._rows - 2; i >= 0; i--) {
       double sum = (T)0;
-      for (int j = i + 1; j < this->coefficients._columns; j++) {
-        sum += this->coefficients._elements[i * this->coefficients._columns + j] *
+      for (int j = i + 1; j < this->coefficients._rows; j++) {
+        sum += this->coefficients._elements[i * this->coefficients._rows + j] *
                this->variables._elements[j];
       }
       this->variables._elements[i] =
