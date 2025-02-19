@@ -17,7 +17,7 @@ public:
   unsigned int _columns;
   unsigned int _size;
 
-  enum EigtenValueNumericMethod { POWER_METHOD, QR, RAYLEIGHT_QUOTIENT };
+  enum EigenvalueNumericMethod { POWER_METHOD, QR, RAYLEIGH_QUOTIENT };
 
 public:
   /**
@@ -276,14 +276,14 @@ public:
    */
   std::pair<Matrix<T>, Matrix<T>> QRdecomp() const;
 
-  double eigtenValue(EigtenValueNumericMethod eigtenValueNumericMethod);
+  double eigenvalue(EigenvalueNumericMethod eigtenValueNumericMethod);
 
 private:
-  double powerMethodEigtenValue();
+  double powerMethodEigenvalue();
 
-  double qrMethodEigtenValue();
+  double qrMethodEigenvalue();
 
-  double rayleightQuotient();
+  double rayleighQuotientEigenvalue(unsigned int iterations = 5, double epsilon = 1e-10);
 };
 typedef Matrix<double> MatrixD;
 typedef Matrix<int> MatrixI;
@@ -320,7 +320,7 @@ inline MWP::Matrix<T> TransposeMatrix(const MWP::Matrix<T> &matrix) {
  * @return MWP::Matrix<T> The identity matrix.
  */
 template <typename T>
-inline MWP::Matrix<T> IdentityMatrix(unsigned int rows, unsigned int columns) {
+inline MWP::Matrix<T> identityMatrix(unsigned int rows, unsigned int columns) {
   if (rows != columns) {
     throw std::runtime_error("An identity matrix should have number of rows "
                              "equal to the number of columns");
@@ -426,16 +426,18 @@ inline MWP::Matrix<T> RandomSymetricMatrix(unsigned int rows,
 
 // template <typename T>
 // inline MWP::Matrix<T> RandomSymetricMatrix(unsigned int rows,
-//                                            unsigned int columns, T min, T max) {
+//                                            unsigned int columns, T min, T
+//                                            max) {
 //   if (rows != columns) {
 //     throw std::runtime_error(
-//         "Symetric matrix should be square! Invalid number of rows and columns");
+//         "Symetric matrix should be square! Invalid number of rows and
+//         columns");
 //   }
 //   MWP::Matrix<T> symetricRandomMatrix(rows, columns);
-  // std::mt19937 gen(42);
-  // std::uniform_real_distribution<> dis(min, max);
-  // for (int i = 0; i < symetricRandomMatrix._size; i++) {
-  //   symetricRandomMatrix._elements[i] = dis(gen);
-  // }
-  // return symetricRandomMatrix;
+// std::mt19937 gen(42);
+// std::uniform_real_distribution<> dis(min, max);
+// for (int i = 0; i < symetricRandomMatrix._size; i++) {
+//   symetricRandomMatrix._elements[i] = dis(gen);
+// }
+// return symetricRandomMatrix;
 // }

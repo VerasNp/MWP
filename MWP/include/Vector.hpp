@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <random>
+#include <stdexcept>
 #include <vector>
 
 namespace MWP {
@@ -167,12 +168,42 @@ inline MWP::Matrix<T> toMatrix(const MWP::Vector<T> &vector) {
   return MWP::Matrix<T>(vector._elements, vector._rows, vector._columns);
 }
 
+/**
+ * @brief 
+ * 
+ * @tparam T 
+ * @param rows 
+ * @param min 
+ * @param max 
+ * @return MWP::Vector<T> 
+ */
 template <typename T>
-inline MWP::Vector<T> randomVector(unsigned int rows, unsigned int columns,
-                                   int min, int max) {
+inline MWP::Vector<T> randomColumnVector(unsigned int rows, int min = 0,
+                                         int max = 1) {
   std::mt19937 gen(42);
   std::uniform_real_distribution<> dis(min, max);
-  MWP::Vector<T> randomVector(rows, columns);
+  MWP::Vector<T> randomVector(rows, 1);
+  for (int i = 0; i < randomVector._size; i++) {
+    randomVector._elements[i] = dis(gen);
+  }
+  return randomVector;
+}
+
+/**
+ * @brief Should generate a random row vector with given number of rows
+ * 
+ * @tparam T Type of 
+ * @param columns 
+ * @param min 
+ * @param max 
+ * @return MWP::Vector<T> 
+ */
+template <typename T>
+inline MWP::Vector<T> randomRowVector(unsigned int columns, int min = 0,
+                                      int max = 1) {
+  std::mt19937 gen(42);
+  std::uniform_real_distribution<> dis(min, max);
+  MWP::Vector<T> randomVector(1, columns);
   for (int i = 0; i < randomVector._size; i++) {
     randomVector._elements[i] = dis(gen);
   }

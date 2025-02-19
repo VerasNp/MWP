@@ -157,4 +157,32 @@ TEST_CASE("Tests the vectos class and its functionalities") {
     CHECK(vectorD._rows == toMatrixVectorD._rows);
     CHECK(vectorD._columns == toMatrixVectorD._columns);
   }
+  SUBCASE("Test the column vector generation with random elements") {
+    SUBCASE("Should not generate a column vector if the number of rows is "
+            "equal to zero") {
+      CHECK_THROWS_WITH_AS(randomColumnVector<double>(0),
+                           "The row or column attribute cannot be zero",
+                           std::runtime_error);
+    }
+    SUBCASE("Should generate a column vector") {
+      MWP::VectorD columnVector = randomColumnVector<double>(4);
+      CHECK(columnVector._size == 4);
+      CHECK(columnVector._rows == 4);
+      CHECK(columnVector._columns == 1);
+    }
+  }
+  SUBCASE("Test the row vector generation with random elements") {
+    SUBCASE("Should not generate a row vector if the number of columns is "
+            "equal to zero") {
+      CHECK_THROWS_WITH_AS(randomRowVector<double>(0),
+                           "The row or column attribute cannot be zero",
+                           std::runtime_error);
+    }
+    SUBCASE("Should generate a row vector") {
+      MWP::VectorD columnVector = randomRowVector<double>(4);
+      CHECK(columnVector._size == 4);
+      CHECK(columnVector._rows == 1);
+      CHECK(columnVector._columns == 4);
+    }
+  }
 }

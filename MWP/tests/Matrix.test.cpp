@@ -2,6 +2,7 @@
 #include "Vector.hpp"
 #include "doctest/doctest.h"
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
 #include <sys/types.h>
 #include <utility>
@@ -205,15 +206,15 @@ TEST_CASE("Tests the matrix class") {
     MWP::MatrixD matrix2D({1.0f, 1.0f, 4.0f, 4.0f}, 2, 2);
     CHECK(!matrix2D.isUpperTriangular());
   }
-  SUBCASE("Should create an identity matrix") {
+  SUBCASE("Test the identity matrix creation") {
     SUBCASE("Should not create an identity matrix if the given number of rows "
             "and columns are different") {
-      CHECK_THROWS_WITH_AS(IdentityMatrix<double>(1, 2),
+      CHECK_THROWS_WITH_AS(identityMatrix<double>(1, 2),
                            "An identity matrix should have number of rows "
                            "equal to the number of columns",
                            std::runtime_error);
     }
-    MWP::MatrixD identityMatrix = IdentityMatrix<double>(2, 2);
+    MWP::MatrixD identityMatrix = ::identityMatrix<double>(2, 2);
     CHECK(identityMatrix(0, 0) == 1.0f);
     CHECK(identityMatrix(0, 1) == 0.0f);
     CHECK(identityMatrix(1, 0) == 0.0f);
@@ -332,7 +333,7 @@ TEST_CASE("Tests the matrix class") {
                         3, 3);
 
     std::pair<MWP::MatrixD, MWP::MatrixD> dc = matrix.QRdecomp();
-    MWP::MatrixD id = IdentityMatrix<double>(3, 3);
+    MWP::MatrixD id = identityMatrix<double>(3, 3);
     MWP::MatrixD qt = TransposeMatrix<double>(dc.first);
 
     CHECK(doctest::Approx((qt * dc.first)(0, 0)) == id(0, 0));
@@ -366,5 +367,10 @@ TEST_CASE("Tests the matrix class") {
     CHECK(doctest::Approx(Dot(v0, v1)) == 0.0);
     CHECK(doctest::Approx(Dot(v0, v2)) == 0.0);
     CHECK(doctest::Approx(Dot(v1, v2)) == 0.0);
+  }
+  SUBCASE("Eigenvalue with rayleigh quotient method") {
+    MWP::MatrixD matrixD({2.0f, 1.0f, 4.0f, 5.0f}, 2, 2);
+    double eigenValue = matrixD.eigenvalue(MWP::MatrixD::RAYLEIGH_QUOTIENT);
+    CHECK(eigenValue == 6);
   }
 }

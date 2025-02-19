@@ -2,8 +2,10 @@
 #include "LinSys.hpp"
 #include "Vector.hpp"
 #include <cstdlib>
+#include <iostream>
 #include <stdexcept>
 #include <sys/types.h>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -147,7 +149,7 @@ Vector<T> Matrix<T>::operator*(const Vector<T> &vector) const {
     throw std::runtime_error(
         "Invalid dimensions for matrix-vector multiplication");
   }
-  Vector<T> result(1, this->_rows);
+  Vector<T> result(this->_rows, vector._columns);
   for (int i = 0; i < this->_rows; i++) {
     result[i] = (T)0;
     for (int j = 0; j < this->_columns; j++) {
@@ -179,11 +181,9 @@ template <typename T> bool Matrix<T>::isSquare() {
 }
 
 template <typename T> bool Matrix<T>::isLowerTriangular() {
-  if (!this->isSquare())
-    return false;
   for (int i = 0; i < this->_rows; i++) {
     for (int j = 0; j < this->_columns; j++) {
-      if (i < j && (this->_elements[i * this->_columns + j]) != (T)0) {
+      if (i < j && std::abs((this->_elements[i * this->_columns + j])) > 10e-10) {
         return false;
       }
     }
@@ -192,11 +192,9 @@ template <typename T> bool Matrix<T>::isLowerTriangular() {
 }
 
 template <typename T> bool Matrix<T>::isUpperTriangular() {
-  if (!this->isSquare())
-    return false;
   for (int i = 0; i < this->_rows; i++) {
     for (int j = 0; j < this->_columns; j++) {
-      if (i > j && (this->_elements[i * this->_columns + j]) != (T)0) {
+      if (i > j && std::abs((this->_elements[i * this->_columns + j])) > 10e-10) {
         return false;
       }
     }
@@ -209,7 +207,7 @@ template <typename T> std::pair<MatrixD, MatrixD> Matrix<T>::LUDecomposition() {
     throw std::runtime_error(
         "The matrix should be square to be decomposed into LU matrices!");
   }
-  MatrixD LMatrix = IdentityMatrix<double>(this->_rows, this->_columns);
+  MatrixD LMatrix = identityMatrix<double>(this->_rows, this->_columns);
   std::vector<double> elementsDouble(this->_elements.begin(),
                                      this->_elements.end());
   MatrixD UMatrix(elementsDouble, this->_rows, this->_columns);
@@ -295,7 +293,7 @@ template <typename T> T MWP::Matrix<T>::norm2() const {
 template <typename T>
 std::pair<MWP::Matrix<T>, MWP::Matrix<T>> MWP::Matrix<T>::QRdecomp() const {
   MWP::Matrix<T> R = *this;
-  MWP::Matrix<T> Q = IdentityMatrix<T>(this->_rows, this->_rows);
+  MWP::Matrix<T> Q = identityMatrix<T>(this->_rows, this->_rows);
   unsigned int k = std::min(this->_rows - 1, this->_columns);
   std::pair<MWP::Matrix<T>, MWP::Matrix<T>> ru;
   for (int i = 0; i < k; i++) {
@@ -313,35 +311,54 @@ std::pair<MWP::Matrix<T>, MWP::Matrix<T>> MWP::Matrix<T>::QRdecomp() const {
 
 template <typename T>
 double
-MWP::Matrix<T>::eigtenValue(EigtenValueNumericMethod eigtenValueNumericMethod) {
-  if (eigtenValueNumericMethod == POWER_METHOD) {
-  } else if (eigtenValueNumericMethod == QR) {
-    return this->qrMethodEigtenValue();
+MWP::Matrix<T>::eigenvalue(EigenvalueNumericMethod eigenvalueNumericMethod) {
+  if (eigenvalueNumericMethod == POWER_METHOD) {
+    throw std::runtime_error("Unknown numeric method to find eigenvalue");
+  } else if (eigenvalueNumericMethod == QR) {
+    return this->qrMethodEigenvalue();
+  } else if (eigenvalueNumericMethod == RAYLEIGH_QUOTIENT) {
+    return this->rayleighQuotientEigenvalue();
   } else {
-    throw std::runtime_error("Unknown numeric method to find eigten value");
+    throw std::runtime_error("Unknown numeric method to find eigenvalue");
   }
 }
 
-template <typename T> double MWP::Matrix<T>::powerMethodEigtenValue() {
+template <typename T> double MWP::Matrix<T>::powerMethodEigenvalue() {
   return 0.0f;
 }
 
-template <typename T> double MWP::Matrix<T>::qrMethodEigtenValue() {
+template <typename T> double MWP::Matrix<T>::qrMethodEigenvalue() {
   return 0.0f;
 }
 
-template <typename T> double MWP::Matrix<T>::rayleightQuotient() {
-  MWP::Vector<T> x = randomVector<T>(this->_rows, 1, 10, 20);
+template <typename T>
+double Matrix<T>::rayleighQuotientEigenvalue(unsigned int iterations,
+                                             double epsilon) {
+  Vector<T> x = randomColumnVector<T>(this->_rows, 10, 20);
   x = x * (1 / x.norm2());
-  return 0.0f;
-  // double mu =
-  //     (transposeVector(x) * (*this * x)) * 1 / (transposeVector(x) * x)[0];
-  // MWP::LinSys<T> shift(
-  //     (*this - (IdentityMatrix<T>(this->_rows, this->_columns) * mu)), x);
-  // shift.solve();
-  // double lambda = Dot(shift., shift.);
-  // MWP::Vector<T> nextX = shift.variables * (1/(transposeVector(shift.variables) * shift.variables)[0]);
-
+  Matrix<T> identityMatrix = ::identityMatrix<T>(this->_rows, this->_columns);
+  for (unsigned int iteration = 0; iteration < iterations; iteration++) {
+    double rho = ((transposeVector(x) * (*this * x)) *
+                  (1 / (transposeVector(x) * x)[0]))[0];
+    Vector<T> newX;
+    if constexpr (std::is_same_v<T, double>) {
+      LinSysD linSys((*this - (identityMatrix * rho)), x);
+      linSys.solve(LinSysD::LU);
+      newX = linSys._variables * (1 / linSys._variables.norm2());
+    } else {
+      LinSysI linSys((*this - (identityMatrix * rho)), x);
+      linSys.solve(LinSysI::LU);
+      newX = linSys._variables * (1 / linSys._variables.norm2());
+    }
+    Vector<T> diff = newX - x;
+    if (diff.norm2() < epsilon) {
+      break;
+    }
+    x = newX;
+  }
+  double rho = ((transposeVector(x) * (*this * x)) *
+                (1 / (transposeVector(x) * x)[0]))[0];
+  return rho;
 }
 
 template class MWP::Matrix<double>;

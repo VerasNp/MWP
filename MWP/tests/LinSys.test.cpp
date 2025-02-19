@@ -37,9 +37,9 @@ TEST_CASE("Tests the LinSys class") {
     }
     MWP::VectorD constantVector({8.0f, 2.0f}, 2, 1);
     MWP::LinSysD linearSystem(coefficientMatrix, constantVector);
-    CHECK(linearSystem.coefficients._size == coefficientMatrix._size);
-    CHECK(linearSystem.variables._rows == constantVector._rows);
-    CHECK(linearSystem.constants._size == constantVector._size);
+    CHECK(linearSystem._coefficients._size == coefficientMatrix._size);
+    CHECK(linearSystem._variables._rows == constantVector._rows);
+    CHECK(linearSystem._constants._size == constantVector._size);
   }
   SUBCASE("Should solve a linear system of equations with the forward "
           "substitition algorithm") {
@@ -65,10 +65,10 @@ TEST_CASE("Tests the LinSys class") {
     MWP::VectorD constantVector({4.0f, 1.0f, 48.0f, 6.0f}, 4, 1);
     MWP::LinSysD linearSystem(coefficientMatrix, constantVector);
     linearSystem.solveForwardSubstitution();
-    CHECK(linearSystem.variables[0] == 2.0f);
-    CHECK(linearSystem.variables[1] == -1.0f);
-    CHECK(linearSystem.variables[2] == 5.0f);
-    CHECK(linearSystem.variables[3] == 3.0f);
+    CHECK(linearSystem._variables[0] == 2.0f);
+    CHECK(linearSystem._variables[1] == -1.0f);
+    CHECK(linearSystem._variables[2] == 5.0f);
+    CHECK(linearSystem._variables[3] == 3.0f);
   }
   SUBCASE("Should solve a linear system of equations with the back "
           "substitition algorithm") {
@@ -92,9 +92,9 @@ TEST_CASE("Tests the LinSys class") {
     MWP::VectorD constantVector({1.0f, -2.0f, 28.0f, 8.0f}, 4, 1);
     MWP::LinSysD linearSystem(coefficientMatrix, constantVector);
     linearSystem.solveBackSubstitution();
-    CHECK(linearSystem.variables[0] == -3.0f);
-    CHECK(linearSystem.variables[1] == 0.0f);
-    CHECK(linearSystem.variables[2] == 2.0f);
-    CHECK(linearSystem.variables[3] == 4.0f);
+    CHECK(linearSystem._variables[0] == -3.0f);
+    CHECK(linearSystem._variables[1] == 0.0f);
+    CHECK(linearSystem._variables[2] == 2.0f);
+    CHECK(linearSystem._variables[3] == 4.0f);
   }
 }

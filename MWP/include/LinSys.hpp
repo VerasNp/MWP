@@ -4,9 +4,11 @@
 namespace MWP {
 template <typename T> class LinSys {
 public:
-  Matrix<T> coefficients;
-  Vector<T> variables;
-  Vector<T> constants;
+  Matrix<T> _coefficients;
+  Vector<T> _variables;
+  Vector<T> _constants;
+
+  enum SolverMethod { LU };
 
 public:
   /**
@@ -36,6 +38,11 @@ public:
    * systems.
    */
   void solveBackSubstitution();
+
+  void solve(SolverMethod solverMethod);
+
+private:
+  void solveWithLUMethod();
 };
 typedef LinSys<double> LinSysD;
 typedef LinSys<int> LinSysI;
