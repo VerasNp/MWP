@@ -23,8 +23,7 @@ public:
   /**
    * @brief Default constructor for matrix
    *
-   * Init a empty matrix and size equal to zero
-   *
+   * Initializes an empty matrix with size equal to zero (0x0)
    */
   Matrix<T>();
 
@@ -32,7 +31,7 @@ public:
    * @brief Constructor for the Matrix class.
    *
    * This constructor initializes the matrix with the given number of rows and
-   * columns and set all elements to zero.
+   * columns, and sets all elements to zero.
    *
    * @tparam T The type of the matrix elements.
    * @param rows The number of rows in the matrix.

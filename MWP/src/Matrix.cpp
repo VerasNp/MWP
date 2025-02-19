@@ -3,6 +3,7 @@
 #include "Vector.hpp"
 #include <cstdlib>
 #include <stdexcept>
+#include <sys/types.h>
 #include <utility>
 #include <vector>
 
@@ -18,16 +19,14 @@ template <typename T> Matrix<T>::Matrix() {
 template <typename T>
 Matrix<T>::Matrix(unsigned int rows, unsigned int columns) {
   if (columns == 0 || rows == 0) {
-    throw std::runtime_error("The row or column attribute cannot be zero");
+    throw std::runtime_error("The row or column attribute cannot be zero!");
   }
   this->_rows = rows;
   this->_columns = columns;
   this->_size = rows * columns;
   _elements.resize(this->_size);
-  for (int i = 0; i < this->_rows; i++) {
-    for (int j = 0; j < this->_columns; j++) {
-      this->_elements[i * this->_columns + j] = (T)0;
-    }
+  for (uint i = 0; i < this->_size; i++) {
+    this->_elements[i] = (T)0;
   }
 }
 
