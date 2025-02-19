@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <random>
 #include <vector>
 
 namespace MWP {
@@ -49,6 +50,7 @@ public:
    * @param columns The number of columns in the vector.
    */
   Vector(std::vector<T> elements, unsigned int rows, unsigned int columns);
+
 public:
   /**
    * @brief Access the vector components by index
@@ -163,4 +165,16 @@ inline T Dot(const MWP::Vector<T> &vector1, const MWP::Vector<T> &vector2) {
 template <typename T>
 inline MWP::Matrix<T> toMatrix(const MWP::Vector<T> &vector) {
   return MWP::Matrix<T>(vector._elements, vector._rows, vector._columns);
+}
+
+template <typename T>
+inline MWP::Vector<T> randomVector(unsigned int rows, unsigned int columns,
+                                   int min, int max) {
+  std::mt19937 gen(42);
+  std::uniform_real_distribution<> dis(min, max);
+  MWP::Vector<T> randomVector(rows, columns);
+  for (int i = 0; i < randomVector._size; i++) {
+    randomVector._elements[i] = dis(gen);
+  }
+  return randomVector;
 }

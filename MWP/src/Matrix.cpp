@@ -1,4 +1,7 @@
 #include "Matrix.hpp"
+#include "LinSys.hpp"
+#include "Vector.hpp"
+#include <cstdlib>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -313,17 +316,33 @@ template <typename T>
 double
 MWP::Matrix<T>::eigtenValue(EigtenValueNumericMethod eigtenValueNumericMethod) {
   if (eigtenValueNumericMethod == POWER_METHOD) {
-    return powerMethodEigtenValue();
   } else if (eigtenValueNumericMethod == QR) {
-    return qrMethodEigtenValue();
+    return this->qrMethodEigtenValue();
   } else {
     throw std::runtime_error("Unknown numeric method to find eigten value");
   }
 }
 
-template<typename T>
-double MWP::Matrix<T>::powerMethodEigtenValue(){
-  MWP
+template <typename T> double MWP::Matrix<T>::powerMethodEigtenValue() {
+  return 0.0f;
+}
+
+template <typename T> double MWP::Matrix<T>::qrMethodEigtenValue() {
+  return 0.0f;
+}
+
+template <typename T> double MWP::Matrix<T>::rayleightQuotient() {
+  MWP::Vector<T> x = randomVector<T>(this->_rows, 1, 10, 20);
+  x = x * (1 / x.norm2());
+  return 0.0f;
+  // double mu =
+  //     (transposeVector(x) * (*this * x)) * 1 / (transposeVector(x) * x)[0];
+  // MWP::LinSys<T> shift(
+  //     (*this - (IdentityMatrix<T>(this->_rows, this->_columns) * mu)), x);
+  // shift.solve();
+  // double lambda = Dot(shift., shift.);
+  // MWP::Vector<T> nextX = shift.variables * (1/(transposeVector(shift.variables) * shift.variables)[0]);
+
 }
 
 template class MWP::Matrix<double>;

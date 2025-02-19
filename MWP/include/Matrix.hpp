@@ -17,7 +17,7 @@ public:
   unsigned int _columns;
   unsigned int _size;
 
-  enum EigtenValueNumericMethod { POWER_METHOD, QR };
+  enum EigtenValueNumericMethod { POWER_METHOD, QR, RAYLEIGHT_QUOTIENT };
 
 public:
   /**
@@ -283,6 +283,8 @@ private:
   double powerMethodEigtenValue();
 
   double qrMethodEigtenValue();
+
+  double rayleightQuotient();
 };
 typedef Matrix<double> MatrixD;
 typedef Matrix<int> MatrixI;
@@ -423,18 +425,18 @@ inline MWP::Matrix<T> RandomSymetricMatrix(unsigned int rows,
   return symetricRandomMatrix;
 }
 
-template <typename T>
-inline MWP::Matrix<T> RandomSymetricMatrix(unsigned int rows,
-                                           unsigned int columns, T min, T max) {
-  if (rows != columns) {
-    throw std::runtime_error(
-        "Symetric matrix should be square! Invalid number of rows and columns");
-  }
-  MWP::Matrix<T> symetricRandomMatrix(rows, columns);
-  std::mt19937 gen(42);
-  std::uniform_real_distribution<> dis(min, max);
-  for (int i = 0; i < symetricRandomMatrix._size; i++) {
-    symetricRandomMatrix._elements[i] = dis(gen);
-  }
-  return symetricRandomMatrix;
-}
+// template <typename T>
+// inline MWP::Matrix<T> RandomSymetricMatrix(unsigned int rows,
+//                                            unsigned int columns, T min, T max) {
+//   if (rows != columns) {
+//     throw std::runtime_error(
+//         "Symetric matrix should be square! Invalid number of rows and columns");
+//   }
+//   MWP::Matrix<T> symetricRandomMatrix(rows, columns);
+  // std::mt19937 gen(42);
+  // std::uniform_real_distribution<> dis(min, max);
+  // for (int i = 0; i < symetricRandomMatrix._size; i++) {
+  //   symetricRandomMatrix._elements[i] = dis(gen);
+  // }
+  // return symetricRandomMatrix;
+// }
