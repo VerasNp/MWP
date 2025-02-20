@@ -30,29 +30,29 @@ TEST_CASE("Tests the matrix class") {
     SUBCASE("Should init a matrix with all zero components with given correct "
             "values of rows and columns") {
       MWP::MatrixD matrix1D(3, 1);
-      for (uint i = 0; i < matrix1D._rows; i++) {
-        for (uint j = 0; j < matrix1D._columns; j++) {
+      for (unsigned int i = 0; i < matrix1D._rows; i++) {
+        for (unsigned int j = 0; j < matrix1D._columns; j++) {
           CHECK(matrix1D[i * matrix1D._columns + j] == 0.0f);
           CHECK(matrix1D(i, j) == 0.0f);
         }
       }
       MWP::MatrixD matrix2D(1, 3);
-      for (uint i = 0; i < matrix2D._rows; i++) {
-        for (uint j = 0; j < matrix2D._columns; j++) {
+      for (unsigned int i = 0; i < matrix2D._rows; i++) {
+        for (unsigned int j = 0; j < matrix2D._columns; j++) {
           CHECK(matrix2D[i * matrix2D._columns + j] == 0.0f);
           CHECK(matrix2D(i, j) == 0.0f);
         }
       }
       MWP::MatrixI matrix1I(3, 3);
-      for (uint i = 0; i < matrix1I._rows; i++) {
-        for (uint j = 0; j < matrix1I._columns; j++) {
+      for (unsigned int i = 0; i < matrix1I._rows; i++) {
+        for (unsigned int j = 0; j < matrix1I._columns; j++) {
           CHECK(matrix1I[i * matrix1I._columns + j] == 0);
           CHECK(matrix1I(i, j) == 0);
         }
       }
       MWP::MatrixI matrix2I(1, 1);
-      for (uint i = 0; i < matrix2I._rows; i++) {
-        for (uint j = 0; j < matrix2I._columns; j++) {
+      for (unsigned int i = 0; i < matrix2I._rows; i++) {
+        for (unsigned int j = 0; j < matrix2I._columns; j++) {
           CHECK(matrix2I[i * matrix2I._columns + j] == 0);
           CHECK(matrix2I(i, j) == 0);
         }
