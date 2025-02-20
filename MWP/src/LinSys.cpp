@@ -3,8 +3,6 @@
 #include <utility>
 
 using namespace MWP;
-template class MWP::LinSys<double>;
-template class MWP::LinSys<int>;
 
 template <typename T>
 LinSys<T>::LinSys(Matrix<T> coefficients, Vector<T> constants) {
@@ -99,3 +97,6 @@ template <typename T> void LinSys<T>::solveWithLUMethod() {
   }
   this->_variables = convVariables;
 }
+
+template class MWP::LinSys<double>;
+template class MWP::LinSys<int>;

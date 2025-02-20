@@ -2,7 +2,6 @@
 #include "LinSys.hpp"
 #include "Vector.hpp"
 #include <cstdlib>
-#include <iostream>
 #include <stdexcept>
 #include <sys/types.h>
 #include <type_traits>
