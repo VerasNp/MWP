@@ -2,7 +2,6 @@
 #include "Vector.hpp"
 #include "doctest/doctest.h"
 #include <cmath>
-#include <iostream>
 #include <stdexcept>
 #include <sys/types.h>
 #include <utility>

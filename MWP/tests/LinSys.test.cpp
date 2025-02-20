@@ -30,7 +30,7 @@ TEST_CASE("Tests the LinSys class") {
         "constant vector if the number of rows in the coefficient matrix is "
         "equal to one") {
       MWP::MatrixD coefficientMatrix({2.0f, 3.0f}, 1, 2);
-      MWP::VectorD constantVector({8.0f, 2.0f}, 2, 1);
+      MWP::VectorD constantVector({8.0f }, 1, 1);
       CHECK_THROWS_WITH_AS(
           MWP::LinSysD linearSystem(coefficientMatrix, constantVector),
           "Incompatible coefficient matrix dimension", std::runtime_error);
@@ -41,15 +41,14 @@ TEST_CASE("Tests the LinSys class") {
     CHECK(linearSystem._variables._rows == constantVector._rows);
     CHECK(linearSystem._constants._size == constantVector._size);
   }
-  SUBCASE("Should solve a linear system of equations with the forward "
-          "substitition algorithm") {
+  SUBCASE("Test the forward substitition algorithm") {
     SUBCASE(
         "Should not solve a linear system of equations with the forward "
         "substitition algorithm if the system is not a lower triangular linear "
         "system of equations") {
       MWP::MatrixD coefficientMatrix({2.0f, 3.0f, 5.0f, -1.0f, 4.0f, 8.0f}, 3,
                                      2);
-      MWP::VectorD constantVector({8.0f, 2.0f}, 2, 1);
+      MWP::VectorD constantVector({8.0f, 2.0f, 2.0f}, 3, 1);
       MWP::LinSysD linearSystem(coefficientMatrix, constantVector);
       CHECK_THROWS_WITH_AS(
           linearSystem.solveForwardSubstitution(),
@@ -70,14 +69,13 @@ TEST_CASE("Tests the LinSys class") {
     CHECK(linearSystem._variables[2] == 5.0f);
     CHECK(linearSystem._variables[3] == 3.0f);
   }
-  SUBCASE("Should solve a linear system of equations with the back "
-          "substitition algorithm") {
+  SUBCASE("Test the back substitition algorithm") {
     SUBCASE("Should not solve a linear system of equations with the back "
             "substitition algorithm if the system is not an upper triangular "
             "linear system of equations") {
       MWP::MatrixD coefficientMatrix({2.0f, 3.0f, 5.0f, -1.0f, 4.0f, 8.0f}, 3,
                                      2);
-      MWP::VectorD constantVector({8.0f, 2.0f}, 2, 1);
+      MWP::VectorD constantVector({8.0f, 2.0f, 2.0f}, 3, 1);
       MWP::LinSysD linearSystem(coefficientMatrix, constantVector);
       CHECK_THROWS_WITH_AS(
           linearSystem.solveBackSubstitution(),

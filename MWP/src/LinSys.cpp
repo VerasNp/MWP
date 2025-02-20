@@ -15,6 +15,7 @@ LinSys<T>::LinSys(Matrix<T> coefficients, Vector<T> constants) {
   if (constants._columns > 1) {
     throw std::runtime_error("Incompatible constants vector dimension");
   }
+  // TODO: Lin sys of 1 equation?
   if (coefficients._rows == 1) {
     throw std::runtime_error("Incompatible coefficient matrix dimension");
   }
