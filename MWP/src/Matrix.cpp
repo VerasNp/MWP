@@ -3,7 +3,6 @@
 #include "Vector.hpp"
 #include <cstdlib>
 #include <stdexcept>
-#include <sys/types.h>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -26,7 +25,7 @@ Matrix<T>::Matrix(unsigned int rows, unsigned int columns) {
   this->_columns = columns;
   this->_size = rows * columns;
   _elements.resize(this->_size);
-  for (uint i = 0; i < this->_size; i++) {
+  for (unsigned int i = 0; i < this->_size; i++) {
     this->_elements[i] = (T)0;
   }
 }
