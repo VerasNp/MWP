@@ -372,4 +372,9 @@ TEST_CASE("Tests the matrix class") {
     double eigenValue = matrixD.eigenvalue(MWP::MatrixD::RAYLEIGH_QUOTIENT);
     CHECK(eigenValue == 6);
   }
+  SUBCASE("Test method to find the eigenvalue of a matrix with power method") {
+    MWP::MatrixD matrixD({2.0f, 1.0f, 4.0f, 5.0f}, 2, 2);
+    double eigenValue = matrixD.eigenvalue(MWP::MatrixD::POWER_METHOD);
+    CHECK(eigenValue == doctest::Approx(6.00023));
+  }
 }

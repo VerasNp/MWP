@@ -181,7 +181,8 @@ template <typename T> bool Matrix<T>::isSquare() {
 template <typename T> bool Matrix<T>::isLowerTriangular() {
   for (int i = 0; i < this->_rows; i++) {
     for (int j = 0; j < this->_columns; j++) {
-      if (i < j && std::abs((this->_elements[i * this->_columns + j])) > 10e-10) {
+      if (i < j &&
+          std::abs((this->_elements[i * this->_columns + j])) > 10e-10) {
         return false;
       }
     }
@@ -192,7 +193,8 @@ template <typename T> bool Matrix<T>::isLowerTriangular() {
 template <typename T> bool Matrix<T>::isUpperTriangular() {
   for (int i = 0; i < this->_rows; i++) {
     for (int j = 0; j < this->_columns; j++) {
-      if (i > j && std::abs((this->_elements[i * this->_columns + j])) > 10e-10) {
+      if (i > j &&
+          std::abs((this->_elements[i * this->_columns + j])) > 10e-10) {
         return false;
       }
     }
@@ -311,7 +313,7 @@ template <typename T>
 double
 MWP::Matrix<T>::eigenvalue(EigenvalueNumericMethod eigenvalueNumericMethod) {
   if (eigenvalueNumericMethod == POWER_METHOD) {
-    throw std::runtime_error("Unknown numeric method to find eigenvalue");
+    return this->powerMethodEigenvalue();
   } else if (eigenvalueNumericMethod == QR) {
     return this->qrMethodEigenvalue();
   } else if (eigenvalueNumericMethod == RAYLEIGH_QUOTIENT) {
@@ -321,8 +323,22 @@ MWP::Matrix<T>::eigenvalue(EigenvalueNumericMethod eigenvalueNumericMethod) {
   }
 }
 
-template <typename T> double MWP::Matrix<T>::powerMethodEigenvalue() {
-  return 0.0f;
+template <typename T>
+double MWP::Matrix<T>::powerMethodEigenvalue(unsigned int iterations,
+                                             double epsilon) {
+  Vector<T> x = randomColumnVector<T>(this->_rows, 10, 20);
+  double inv = (1 / (*this * x).norm2());
+  for (unsigned int iteration = 0; iteration < iterations; iteration++) {
+    Vector<T> newX = (*this * x) * inv;
+    Vector<T> diff = newX - x;
+    if (diff.norm2() < epsilon) {
+      break;
+    }
+    x = newX;
+  }
+  double rho = ((transposeVector(x) * (*this * x)) *
+                (1 / (transposeVector(x) * x)[0]))[0];
+  return rho;
 }
 
 template <typename T> double MWP::Matrix<T>::qrMethodEigenvalue() {

@@ -279,7 +279,7 @@ public:
   double eigenvalue(EigenvalueNumericMethod eigtenValueNumericMethod);
 
 private:
-  double powerMethodEigenvalue();
+  double powerMethodEigenvalue(unsigned int iterations = 5, double epsilon = 1e-10);
 
   double qrMethodEigenvalue();
 
