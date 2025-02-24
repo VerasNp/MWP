@@ -327,18 +327,19 @@ template <typename T>
 double MWP::Matrix<T>::powerMethodEigenvalue(unsigned int iterations,
                                              double epsilon) {
   Vector<T> x = randomColumnVector<T>(this->_rows, 10, 20);
-  double inv = (1 / (*this * x).norm2());
   for (unsigned int iteration = 0; iteration < iterations; iteration++) {
-    Vector<T> newX = (*this * x) * inv;
+    Vector<T> newX = (*this) * x;
+    newX = newX * (1 / (*this * newX).norm2());
     Vector<T> diff = newX - x;
     if (diff.norm2() < epsilon) {
       break;
     }
     x = newX;
   }
-  double rho = ((transposeVector(x) * (*this * x)) *
-                (1 / (transposeVector(x) * x)[0]))[0];
-  return rho;
+  Vector<T> newX = *this * x;
+  double eigenvalue =
+      ((transposeVector(x) * newX) * (1 / (transposeVector(x) * x)[0]))[0];
+  return eigenvalue;
 }
 
 template <typename T> double MWP::Matrix<T>::qrMethodEigenvalue() {
