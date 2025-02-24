@@ -377,4 +377,5 @@ TEST_CASE("Tests the matrix class") {
     double eigenValue = matrixD.eigenvalue(MWP::MatrixD::POWER_METHOD);
     CHECK(eigenValue == doctest::Approx(6.00023));
   }
+  
 }
