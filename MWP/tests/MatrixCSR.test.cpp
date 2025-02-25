@@ -17,8 +17,11 @@ TEST_CASE("Test the Matrix CSR class") {
     CHECK(matrixCSRI._indexes == matrixCSRIIndexes);
   }
   SUBCASE("Test the Multiplication of a matrix with vector") {
-    MWP::MatrixCSRI matrixCSRI({0, 2, 1, 0, 1}, {1, 2, 3, 4, 2}, {4, 2, 0});
+    MWP::MatrixCSRI matrixCSRI({0, 2, 1, 0, 1}, {1, 2, 3, 4, 2}, {0, 2, 3, 5});
     MWP::VectorI vectorI({2, 1, 4}, 3, 1);
-    MWP::MatrixCSRI resultMatVecCSR = matrixCSRI * vectorI;
+    MWP::VectorI resultMatVec = matrixCSRI * vectorI;
+    CHECK(resultMatVec[0] == 10);
+    CHECK(resultMatVec[1] == 3);
+    CHECK(resultMatVec[2] == 10);
   }
 }

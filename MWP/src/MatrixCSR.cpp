@@ -14,13 +14,16 @@ MatrixCSR<T>::MatrixCSR(std::vector<unsigned int> indexes,
 }
 
 template <typename T>
-MatrixCSR<T> MatrixCSR<T>::operator*(const Vector<T> &vector) const {
+Vector<T> MatrixCSR<T>::operator*(const Vector<T> &vector) const {
+  Vector<T> result(vector._rows, 1);
   for (unsigned int i = 0; i < this->_pointers.size(); i++) {
+    T sum = 0;
     for (unsigned int j = this->_pointers[i]; j < this->_pointers[i + 1]; j++) {
-      std::cout << this->_elements[j] << '\n';
+      sum += this->_elements[j] * vector._elements[this->_indexes[j]];
     }
+    result._elements[i] = sum;
   }
-  return {};
+  return result;
 }
 
 template class MWP::MatrixCSR<double>;

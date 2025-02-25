@@ -8,12 +8,12 @@ public:
   std::vector<unsigned int> _pointers;
 
 public:
-  MatrixCSR<T>();
+  MatrixCSR<T>() = default;
   MatrixCSR<T>(std::vector<unsigned int> indexes, std::vector<T> elements,
                std::vector<unsigned int> pointers);
 
 public:
-  MatrixCSR<T> operator*(const Vector<T> &vector) const;
+  Vector<T> operator*(const Vector<T> &vector) const;
 };
 
 typedef MatrixCSR<double> MatrixCSRD;
