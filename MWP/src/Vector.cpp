@@ -1,5 +1,6 @@
 #include "Vector.hpp"
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
 
 using namespace MWP;
