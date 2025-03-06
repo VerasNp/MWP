@@ -54,15 +54,15 @@ Vector<T>::Vector(std::vector<T> elements, unsigned int size,
   this->_elements = elements;
 }
 
-template <typename T> T Vector<T>::operator[](int index) const {
-  if (index < 0 || index >= this->_size) {
+template <typename T> T Vector<T>::operator[](unsigned int index) const {
+  if (index >= this->_size) {
     throw std::runtime_error("Index out of bounds");
   }
   return this->_elements[index];
 }
 
-template <typename T> T &Vector<T>::operator[](int index) {
-  if (index < 0 || index >= this->_size) {
+template <typename T> T &Vector<T>::operator[](unsigned int index) {
+  if (index >= this->_size) {
     throw std::runtime_error("Index out of bounds");
   }
   return this->_elements[index];

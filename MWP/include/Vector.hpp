@@ -57,7 +57,7 @@ public:
    * @param index The index of the component
    * @return The value of the component
    */
-  T operator[](int index) const;
+  T operator[](unsigned int index) const;
 
   /**
    * @brief Access the vector components by index
@@ -67,7 +67,7 @@ public:
    * @param index The index of the component
    * @return The reference to the component
    */
-  T &operator[](int index);
+  T &operator[](unsigned int index);
 
   //   /**
   //    * @brief Overloads the addition operator for Vector objects.
