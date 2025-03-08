@@ -317,18 +317,22 @@ TEST_SUITE("Tests the vectos class and its functionalities") {
           std::runtime_error);
     }
     SUBCASE("Should not subtract two vectors with different formats") {
-      CHECK_THROWS_WITH_AS(columnVectorD1 - rowVectorD1,
-                           "Mismatch on vectors formats for subtraction operation",
-                           std::runtime_error);
-      CHECK_THROWS_WITH_AS(columnVectorI1 - rowVectorI1,
-                           "Mismatch on vectors formats for subtraction operation",
-                           std::runtime_error);
-      CHECK_THROWS_WITH_AS(columnVectorI1 - rowVectorD1,
-                           "Mismatch on vectors formats for subtraction operation",
-                           std::runtime_error);
-      CHECK_THROWS_WITH_AS(columnVectorD1 - rowVectorI1,
-                           "Mismatch on vectors formats for subtraction operation",
-                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          columnVectorD1 - rowVectorD1,
+          "Mismatch on vectors formats for subtraction operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          columnVectorI1 - rowVectorI1,
+          "Mismatch on vectors formats for subtraction operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          columnVectorI1 - rowVectorD1,
+          "Mismatch on vectors formats for subtraction operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          columnVectorD1 - rowVectorI1,
+          "Mismatch on vectors formats for subtraction operation",
+          std::runtime_error);
     }
     SUBCASE("Should subtract two vectors and generate a new one") {
       MWP::VectorD resultColumnVectorD1 = columnVectorD1 - columnVectorD3;
@@ -381,18 +385,45 @@ TEST_SUITE("Tests the vectos class and its functionalities") {
       CHECK(resultRowVectorI2._columns == 3);
     }
   }
-  // SUBCASE("Should multiply vector by scalar") {
-  //   MWP::VectorD vectorD1({2.0f, 3.0f, 4.0f}, 3, 1);
-  //   MWP::VectorD vectorDRes1 = vectorD1 * 3.0f;
-  //   CHECK(vectorDRes1[0] == 6.0f);
-  //   CHECK(vectorDRes1[1] == 9.0f);
-  //   CHECK(vectorDRes1[2] == 12.0f);
-  //   MWP::VectorI vectorI1({2, 3, 4}, 1, 3);
-  //   MWP::VectorI vectorIRes1 = vectorI1 * 3;
-  //   CHECK(vectorIRes1[0] == 6);
-  //   CHECK(vectorIRes1[1] == 9);
-  //   CHECK(vectorIRes1[2] == 12);
-  // }
+  TEST_CASE("Should multiply vector by a scalar") {
+    MWP::VectorD columnVectorD({2.0f, 3.0f, 4.0f}, 3,
+                               MWP::VectorD::COLUMN_VECTOR);
+    MWP::VectorD resultColumnVectorD = columnVectorD * 3.0f;
+    CHECK(resultColumnVectorD[0] == 6.0f);
+    CHECK(resultColumnVectorD[1] == 9.0f);
+    CHECK(resultColumnVectorD[2] == 12.0f);
+    CHECK(resultColumnVectorD._vectorFormat == MWP::VectorD::COLUMN_VECTOR);
+    CHECK(resultColumnVectorD._size == 3);
+    CHECK(resultColumnVectorD._rows == 3);
+    CHECK(resultColumnVectorD._columns == 1);
+    MWP::VectorI columnVectorI({2, 3, 4}, 3, MWP::VectorI::COLUMN_VECTOR);
+    MWP::VectorI resultColumnVectorI = columnVectorI * 3;
+    CHECK(resultColumnVectorI[0] == 6);
+    CHECK(resultColumnVectorI[1] == 9);
+    CHECK(resultColumnVectorI[2] == 12);
+    CHECK(resultColumnVectorI._vectorFormat == MWP::VectorD::COLUMN_VECTOR);
+    CHECK(resultColumnVectorI._size == 3);
+    CHECK(resultColumnVectorI._rows == 3);
+    CHECK(resultColumnVectorI._columns == 1);
+    MWP::VectorD rowVectorD({2.0f, 3.0f, 4.0f}, 3, MWP::VectorD::ROW_VECTOR);
+    MWP::VectorD resultRowVectorD = rowVectorD * 3.0f;
+    CHECK(resultRowVectorD[0] == 6.0f);
+    CHECK(resultRowVectorD[1] == 9.0f);
+    CHECK(resultRowVectorD[2] == 12.0f);
+    CHECK(resultRowVectorD._vectorFormat == MWP::VectorD::ROW_VECTOR);
+    CHECK(resultRowVectorD._size == 3);
+    CHECK(resultRowVectorD._rows == 1);
+    CHECK(resultRowVectorD._columns == 3);
+    MWP::VectorI rowVectorI({2, 3, 4}, 3, MWP::VectorI::ROW_VECTOR);
+    MWP::VectorI resultRowVectorI = rowVectorI * 3;
+    CHECK(resultRowVectorI[0] == 6);
+    CHECK(resultRowVectorI[1] == 9);
+    CHECK(resultRowVectorI[2] == 12);
+    CHECK(resultRowVectorI._vectorFormat == MWP::VectorD::ROW_VECTOR);
+    CHECK(resultRowVectorI._size == 3);
+    CHECK(resultRowVectorI._rows == 1);
+    CHECK(resultRowVectorI._columns == 3);
+  }
   // SUBCASE("Should multiply a vector by another vector") {
   //   SUBCASE("Should not multiply a vector by another vector with incompatible
   //   "

@@ -108,13 +108,16 @@ Vector<T> Vector<T>::operator-(const Vector<U> &vector) const {
   return result;
 }
 
-// template <typename T> Vector<T> Vector<T>::operator*(T scalar) const {
-//   Vector<T> result(this->_elements, this->_rows, this->_columns);
-//   for (int i = 0; i < this->_size; i++) {
-//     result._elements[i] = this->_elements[i] * scalar;
-//   }
-//   return result;
-// }
+template <typename T> Vector<T> Vector<T>::operator*(T scalar) const {
+  if (this->_vectorFormat == UNDEFINED) {
+    throw std::runtime_error("Invalid format for this operation");
+  }
+  Vector<T> result(this->_size, this->_vectorFormat);
+  for (unsigned int i = 0; i < this->_size; i++) {
+    result._elements[i] = this->_elements[i] * scalar;
+  }
+  return result;
+}
 
 // template <typename T>
 // Vector<T> Vector<T>::operator*(const Vector<T> &vector) const {

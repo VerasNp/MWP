@@ -96,20 +96,20 @@ public:
    */
   template <typename U> Vector<T> operator-(const Vector<U> &vector) const;
 
-  //   /**
-  //    * @brief Overloads the multiplication operator for Vector objects.
-  //    *
-  //    * This operator allows for the multiplication of a Vector object by a
-  //    * scalar. It returns a new Vector object whose components are the
-  //    product
-  //    * of the corresponding components of the input vector and the scalar.
-  //    *
-  //    * @tparam T The type of the vector components.
-  //    * @param scalar The scalar value to multiply the vector by.
-  //    * @return A new Vector object that is the result of the vector-scalar
-  //    * multiplication.
-  //    */
-  //   Vector<T> operator*(T scalar) const;
+  /**
+   * @brief Overloads the multiplication operator for Vector objects.
+   *
+   * This operator allows for the multiplication of a Vector object by a
+   * scalar. It returns a new Vector object whose components are the
+   product
+   * of the corresponding components of the input vector and the scalar.
+   *
+   * @tparam T The type of the vector components.
+   * @param scalar The scalar value to multiply the vector by.
+   * @return A new Vector object that is the result of the vector-scalar
+   * multiplication.
+   */
+  Vector<T> operator*(T scalar) const;
 
   //   /**
   //    * @brief Overloads the multiplication operator for Vector objects.
