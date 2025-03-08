@@ -82,19 +82,19 @@ public:
    */
   template <typename U> Vector<T> operator+(const Vector<U> &vector) const;
 
-  //   /**
-  //    * @brief Overloads the subtraction operator for Vector objects.
-  //    *
-  //    * This operator allows for the subtraction of two Vector objects.
-  //    * It returns a new Vector object whose components are the difference
-  //    * of the corresponding components of the two input vectors.
-  //    *
-  //    * @tparam T The type of the vector components.
-  //    * @param vector The vector to be subtracted from the current vector.
-  //    * @return A new Vector object that is the result of the vector
-  //    subtraction.
-  //    */
-  //   Vector<T> operator-(const Vector<T> &vector) const;
+  /**
+   * @brief Overloads the subtraction operator for Vector objects.
+   *
+   * This operator allows for the subtraction of two Vector objects.
+   * It returns a new Vector object whose components are the difference
+   * of the corresponding components of the two input vectors.
+   *
+   * @tparam T The type of the vector components.
+   * @param vector The vector to be subtracted from the current vector.
+   * @return A new Vector object that is the result of the vector
+   subtraction.
+   */
+  template <typename U> Vector<T> operator-(const Vector<U> &vector) const;
 
   //   /**
   //    * @brief Overloads the multiplication operator for Vector objects.

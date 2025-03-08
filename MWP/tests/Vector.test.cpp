@@ -275,22 +275,112 @@ TEST_SUITE("Tests the vectos class and its functionalities") {
       CHECK(resultRowVectorI2._columns == 3);
     }
   }
-  // TEST_CASE("Should subtract two vectors") {
-  //   SUBCASE("Should not subtract two vectors with different dimensions") {
-  //     MWP::VectorD vectorD1({1.0f, 2.0f, 3.0f}, 3, 1);
-  //     MWP::VectorD vectorD2({1.0f, 2.0f, 3.0f}, 1, 3);
-  //     CHECK_THROWS_WITH_AS(
-  //         vectorD1 - vectorD2,
-  //         "Invalid vectors dimensions for subtraction operation",
-  //         std::runtime_error);
-  //   }
-  //   MWP::VectorD vectorD1({1.0f, 2.0f, 3.0f}, 3, 1);
-  //   MWP::VectorD vectorD2({1.0f, 2.0f, 3.0f}, 3, 1);
-  //   MWP::VectorD vectorDRes1 = vectorD1 - vectorD2;
-  //   CHECK(vectorDRes1[0] == 0.0f);
-  //   CHECK(vectorDRes1[1] == 0.0f);
-  //   CHECK(vectorDRes1[2] == 0.0f);
-  // }
+  TEST_CASE("Should subtract two vectors") {
+    MWP::VectorD columnVectorD1({1.0f, 2.0f, 3.0f}, 3,
+                                MWP::VectorD::COLUMN_VECTOR);
+    MWP::VectorD columnVectorD2({4.0f, 5.0f}, 2, MWP::VectorD::COLUMN_VECTOR);
+    MWP::VectorD columnVectorD3({4.0f, 5.0f, 6.0f}, 3,
+                                MWP::VectorD::COLUMN_VECTOR);
+    MWP::VectorI columnVectorI1({1, 2, 3}, 3, MWP::VectorI::COLUMN_VECTOR);
+    MWP::VectorI columnVectorI2({4, 5}, 2, MWP::VectorI::COLUMN_VECTOR);
+    MWP::VectorI columnVectorI3({4, 5, 6}, 3, MWP::VectorI::COLUMN_VECTOR);
+    MWP::VectorD rowVectorD1({1.0f, 2.0f, 3.0f}, 3, MWP::VectorD::ROW_VECTOR);
+    MWP::VectorD rowVectorD2({4.0f, 5.0f}, 2, MWP::VectorD::ROW_VECTOR);
+    MWP::VectorD rowVectorD3({4.0f, 5.0f, 6.0f}, 3, MWP::VectorD::ROW_VECTOR);
+    MWP::VectorI rowVectorI1({1, 2, 3}, 3, MWP::VectorI::ROW_VECTOR);
+    MWP::VectorI rowVectorI2({4, 5}, 2, MWP::VectorI::ROW_VECTOR);
+    MWP::VectorI rowVectorI3({4, 5, 6}, 3, MWP::VectorI::ROW_VECTOR);
+    SUBCASE("Should not subtract two vectors with different dimensions") {
+      CHECK_THROWS_WITH_AS(
+          columnVectorD1 - columnVectorD2,
+          "Mismatch on vectors dimensions for subtraction operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          columnVectorI1 - columnVectorI2,
+          "Mismatch on vectors dimensions for subtraction operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          rowVectorD1 - rowVectorD2,
+          "Mismatch on vectors dimensions for subtraction operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          rowVectorI1 - rowVectorI2,
+          "Mismatch on vectors dimensions for subtraction operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          columnVectorD1 - columnVectorI2,
+          "Mismatch on vectors dimensions for subtraction operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          rowVectorD1 - rowVectorI2,
+          "Mismatch on vectors dimensions for subtraction operation",
+          std::runtime_error);
+    }
+    SUBCASE("Should not subtract two vectors with different formats") {
+      CHECK_THROWS_WITH_AS(columnVectorD1 - rowVectorD1,
+                           "Mismatch on vectors formats for subtraction operation",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(columnVectorI1 - rowVectorI1,
+                           "Mismatch on vectors formats for subtraction operation",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(columnVectorI1 - rowVectorD1,
+                           "Mismatch on vectors formats for subtraction operation",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(columnVectorD1 - rowVectorI1,
+                           "Mismatch on vectors formats for subtraction operation",
+                           std::runtime_error);
+    }
+    SUBCASE("Should subtract two vectors and generate a new one") {
+      MWP::VectorD resultColumnVectorD1 = columnVectorD1 - columnVectorD3;
+      CHECK(resultColumnVectorD1[0] == -3.0f);
+      CHECK(resultColumnVectorD1[1] == -3.0f);
+      CHECK(resultColumnVectorD1[2] == -3.0f);
+      CHECK(resultColumnVectorD1._vectorFormat == MWP::VectorD::COLUMN_VECTOR);
+      CHECK(resultColumnVectorD1._size == 3);
+      CHECK(resultColumnVectorD1._rows == 3);
+      CHECK(resultColumnVectorD1._columns == 1);
+      MWP::VectorD resultRowVectorD1 = rowVectorD1 - rowVectorD3;
+      CHECK(resultRowVectorD1[0] == -3.0f);
+      CHECK(resultRowVectorD1[1] == -3.0f);
+      CHECK(resultRowVectorD1[2] == -3.0f);
+      CHECK(resultRowVectorD1._vectorFormat == MWP::VectorD::ROW_VECTOR);
+      CHECK(resultRowVectorD1._size == 3);
+      CHECK(resultRowVectorD1._rows == 1);
+      CHECK(resultRowVectorD1._columns == 3);
+      MWP::VectorI resultColumnVectorI1 = columnVectorI1 - columnVectorI3;
+      CHECK(resultColumnVectorI1[0] == -3);
+      CHECK(resultColumnVectorI1[1] == -3);
+      CHECK(resultColumnVectorI1[2] == -3);
+      CHECK(resultColumnVectorI1._vectorFormat == MWP::VectorI::COLUMN_VECTOR);
+      CHECK(resultColumnVectorI1._size == 3);
+      CHECK(resultColumnVectorI1._rows == 3);
+      CHECK(resultColumnVectorI1._columns == 1);
+      MWP::VectorI resultRowVectorI1 = rowVectorI1 - rowVectorI3;
+      CHECK(resultRowVectorI1[0] == -3);
+      CHECK(resultRowVectorI1[1] == -3);
+      CHECK(resultRowVectorI1[2] == -3);
+      CHECK(resultRowVectorI1._vectorFormat == MWP::VectorI::ROW_VECTOR);
+      CHECK(resultRowVectorI1._size == 3);
+      CHECK(resultRowVectorI1._rows == 1);
+      CHECK(resultRowVectorI1._columns == 3);
+      MWP::VectorD resultColumnVectorD2 = columnVectorD1 - columnVectorI3;
+      CHECK(resultColumnVectorD2[0] == -3.0f);
+      CHECK(resultColumnVectorD2[1] == -3.0f);
+      CHECK(resultColumnVectorD2[2] == -3.0f);
+      CHECK(resultColumnVectorD2._vectorFormat == MWP::VectorD::COLUMN_VECTOR);
+      CHECK(resultColumnVectorD2._size == 3);
+      CHECK(resultColumnVectorD2._rows == 3);
+      CHECK(resultColumnVectorD2._columns == 1);
+      MWP::VectorI resultRowVectorI2 = rowVectorI1 - rowVectorD3;
+      CHECK(resultRowVectorI2[0] == -3);
+      CHECK(resultRowVectorI2[1] == -3);
+      CHECK(resultRowVectorI2[2] == -3);
+      CHECK(resultRowVectorI2._vectorFormat == MWP::VectorI::ROW_VECTOR);
+      CHECK(resultRowVectorI2._size == 3);
+      CHECK(resultRowVectorI2._rows == 1);
+      CHECK(resultRowVectorI2._columns == 3);
+    }
+  }
   // SUBCASE("Should multiply vector by scalar") {
   //   MWP::VectorD vectorD1({2.0f, 3.0f, 4.0f}, 3, 1);
   //   MWP::VectorD vectorDRes1 = vectorD1 * 3.0f;

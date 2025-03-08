@@ -89,18 +89,24 @@ Vector<T> Vector<T>::operator+(const Vector<U> &vector) const {
   return result;
 }
 
-// template <typename T>
-// Vector<T> Vector<T>::operator-(const Vector<T> &vector) const {
-//   if (this->_rows != vector._rows || this->_columns != vector._columns) {
-//     throw std::runtime_error(
-//         "Invalid vectors dimensions for subtraction operation");
-//   }
-//   Vector<T> result(this->_elements, this->_rows, this->_columns);
-//   for (int i = 0; i < this->_size; i++) {
-//     result._elements[i] = this->_elements[i] - vector._elements[i];
-//   }
-//   return result;
-// }
+template <typename T>
+template <typename U>
+Vector<T> Vector<T>::operator-(const Vector<U> &vector) const {
+  if (this->_size != vector._size) {
+    throw std::runtime_error(
+        "Mismatch on vectors dimensions for subtraction operation");
+  }
+  if (this->_vectorFormat != vector._vectorFormat) {
+    throw std::runtime_error(
+        "Mismatch on vectors formats for subtraction operation");
+  }
+  Vector<T> result(this->_size, this->_vectorFormat);
+  for (unsigned int i = 0; i < this->_size; i++) {
+    result._elements[i] = static_cast<T>(this->_elements[i] -
+                                         static_cast<T>(vector._elements[i]));
+  }
+  return result;
+}
 
 // template <typename T> Vector<T> Vector<T>::operator*(T scalar) const {
 //   Vector<T> result(this->_elements, this->_rows, this->_columns);
@@ -156,3 +162,10 @@ template Vector<double> Vector<double>::operator+
 template Vector<int> Vector<int>::operator+
     <double>(const Vector<double> &) const;
 template Vector<int> Vector<int>::operator+ <int>(const Vector<int> &) const;
+template Vector<double> Vector<double>::operator-
+    <double>(const Vector<double> &) const;
+template Vector<double> Vector<double>::operator-
+    <int>(const Vector<int> &) const;
+template Vector<int> Vector<int>::operator-
+    <double>(const Vector<double> &) const;
+template Vector<int> Vector<int>::operator- <int>(const Vector<int> &) const;
