@@ -114,16 +114,26 @@ TEST_SUITE("Tests the vectos class and its functionalities") {
     }
   }
   TEST_CASE("Tests the access elements operator for vectors") {
-    MWP::VectorD vectorD({1.0f}, 1, 1);
-    MWP::VectorD vectorD({1.0f}, 1, 1);
+    MWP::VectorD columnVectorD({1.0f}, 1, MWP::VectorD::COLUMN_VECTOR);
+    MWP::VectorD rowVectorD({1.0f}, 1, MWP::VectorD::ROW_VECTOR);
+    MWP::VectorI columnVectorI({1}, 1, MWP::VectorI::COLUMN_VECTOR);
+    MWP::VectorI rowVectorI({1}, 1, MWP::VectorI::ROW_VECTOR);
     SUBCASE("Should not access element of vector if index if out of bounds") {
-      CHECK_THROWS_WITH_AS(vectorD[1], "Index out of bounds",
+      CHECK_THROWS_WITH_AS(columnVectorD[1], "Index out of bounds",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(rowVectorD[1], "Index out of bounds",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(columnVectorI[1], "Index out of bounds",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(rowVectorI[1], "Index out of bounds",
                            std::runtime_error);
     }
-    SUBCASE("") {
-
+    SUBCASE("Should access the element of a vector") {
+      CHECK(columnVectorD[0] == 1.0f);
+      CHECK(rowVectorD[0] == 1.0f);
+      CHECK(columnVectorI[0] == 1);
+      CHECK(rowVectorI[0] == 1);
     }
-    CHECK(vectorD[0] == 1.0f);
   }
   // SUBCASE("Should add two vectors") {
   //   SUBCASE("Should not add two vectors with different dimensions") {
