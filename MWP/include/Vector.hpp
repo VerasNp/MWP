@@ -2,6 +2,7 @@
 
 #include "Matrix.hpp"
 #include <cmath>
+#include <cstddef>
 #include <random>
 #include <vector>
 
@@ -9,11 +10,10 @@ namespace MWP {
 
 template <typename T> class Vector : public Matrix<T> {
 public:
-  //   std::vector<T> _elements;
-  //   unsigned int _rows;
-  //   unsigned int _columns;
-  //   unsigned int _size;
-  enum VectorType { ROW_VECTOR, COLUMN_VECTOR };
+  enum VectorFormat { ROW_VECTOR, COLUMN_VECTOR, UNDEFINED };
+
+public:
+  VectorFormat _vectorFormat;
 
 public:
   /**
@@ -33,7 +33,7 @@ public:
    * @param size The size of the vector.
    * @param vectorType The type of the vector (ROW_VECTOR or COLUMN_VECTOR).
    */
-  Vector(unsigned int size, VectorType vectorType);
+  Vector(unsigned int size, VectorFormat vectorType);
 
   /**
    * @brief Inits a vector with given elements, vector size and vector type
@@ -46,7 +46,7 @@ public:
    * @param size The size of the vector.
    * @param vectorType The type of the vector (ROW_VECTOR or COLUMN_VECTOR).
    */
-  Vector(std::vector<T> elements, unsigned int size, VectorType vectorType);
+  Vector(std::vector<T> elements, unsigned int size, VectorFormat vectorType);
 
 public:
   /**
@@ -69,18 +69,18 @@ public:
    */
   T &operator[](unsigned int index);
 
-  //   /**
-  //    * @brief Overloads the addition operator for Vector objects.
-  //    *
-  //    * This operator allows for the addition of two Vector objects.
-  //    * It returns a new Vector object whose components are the sum
-  //    * of the corresponding components of the two input vectors.
-  //    *
-  //    * @tparam T The type of the vector components.
-  //    * @param vector The vector to be added to the current vector.
-  //    * @return A new Vector object that is the result of the vector addition.
-  //    */
-  //   Vector<T> operator+(const Vector<T> &vector) const;
+  /**
+   * @brief Overloads the addition operator for Vector objects.
+   *
+   * This operator allows for the addition of two Vector objects.
+   * It returns a new Vector object whose components are the sum
+   * of the corresponding components of the two input vectors.
+   *
+   * @tparam T The type of the vector components.
+   * @param vector The vector to be added to the current vector.
+   * @return A new Vector object that is the result of the vector addition.
+   */
+  template <typename U> Vector<T> operator+(const Vector<U> &vector) const;
 
   //   /**
   //    * @brief Overloads the subtraction operator for Vector objects.

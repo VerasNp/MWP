@@ -11,11 +11,13 @@ TEST_SUITE("Tests the vectos class and its functionalities") {
     CHECK(vectorD._rows == 0);
     CHECK(vectorD._size == 0);
     CHECK(vectorD._elements.empty());
+    CHECK(vectorD._vectorFormat == MWP::VectorD::UNDEFINED);
     MWP::VectorI vectorI;
     CHECK(vectorI._columns == 0);
     CHECK(vectorI._rows == 0);
     CHECK(vectorI._size == 0);
     CHECK(vectorI._elements.empty());
+    CHECK(vectorI._vectorFormat == MWP::VectorD::UNDEFINED);
   }
   TEST_CASE("Tests the creation of a vector with with given size of rows or "
             "columns") {
@@ -39,18 +41,34 @@ TEST_SUITE("Tests the vectos class and its functionalities") {
       CHECK(columnVectorD[0] == 0.0f);
       CHECK(columnVectorD[1] == 0.0f);
       CHECK(columnVectorD[2] == 0.0f);
+      CHECK(columnVectorD._vectorFormat == MWP::VectorD::COLUMN_VECTOR);
+      CHECK(columnVectorD._size == 3);
+      CHECK(columnVectorD._rows == 3);
+      CHECK(columnVectorD._columns == 1);
       MWP::VectorD rowVectorD(3, MWP::VectorD::ROW_VECTOR);
       CHECK(rowVectorD[0] == 0.0f);
       CHECK(rowVectorD[1] == 0.0f);
       CHECK(rowVectorD[2] == 0.0f);
+      CHECK(rowVectorD._vectorFormat == MWP::VectorD::ROW_VECTOR);
+      CHECK(rowVectorD._size == 3);
+      CHECK(rowVectorD._rows == 1);
+      CHECK(rowVectorD._columns == 3);
       MWP::VectorI columnVectorI(3, MWP::VectorI::COLUMN_VECTOR);
       CHECK(columnVectorI[0] == 0.0f);
       CHECK(columnVectorI[1] == 0.0f);
       CHECK(columnVectorI[2] == 0.0f);
+      CHECK(columnVectorI._vectorFormat == MWP::VectorD::COLUMN_VECTOR);
+      CHECK(columnVectorI._size == 3);
+      CHECK(columnVectorI._rows == 3);
+      CHECK(columnVectorI._columns == 1);
       MWP::VectorI rowVectorI(3, MWP::VectorI::ROW_VECTOR);
       CHECK(rowVectorI[0] == 0.0f);
       CHECK(rowVectorI[1] == 0.0f);
       CHECK(rowVectorI[2] == 0.0f);
+      CHECK(rowVectorI._vectorFormat == MWP::VectorD::ROW_VECTOR);
+      CHECK(rowVectorI._size == 3);
+      CHECK(rowVectorI._rows == 1);
+      CHECK(rowVectorI._columns == 3);
     }
   }
   TEST_CASE("Test the init of a vector with given elements, vector size and "
@@ -98,19 +116,35 @@ TEST_SUITE("Tests the vectos class and its functionalities") {
       CHECK(rowVectorD[0] == 1.0f);
       CHECK(rowVectorD[1] == 2.0f);
       CHECK(rowVectorD[2] == 3.0f);
+      CHECK(rowVectorD._vectorFormat == MWP::VectorD::ROW_VECTOR);
+      CHECK(rowVectorD._size == 3);
+      CHECK(rowVectorD._rows == 1);
+      CHECK(rowVectorD._columns == 3);
       MWP::VectorD columnVectorD({1.0f, 2.0f, 3.0f}, 3,
                                  MWP::VectorD::COLUMN_VECTOR);
       CHECK(columnVectorD[0] == 1.0f);
       CHECK(columnVectorD[1] == 2.0f);
       CHECK(columnVectorD[2] == 3.0f);
+      CHECK(columnVectorD._vectorFormat == MWP::VectorD::COLUMN_VECTOR);
+      CHECK(columnVectorD._size == 3);
+      CHECK(columnVectorD._rows == 3);
+      CHECK(columnVectorD._columns == 1);
       MWP::VectorI rowVectorI({1, 2, 3}, 3, MWP::VectorI::ROW_VECTOR);
       CHECK(rowVectorI[0] == 1);
       CHECK(rowVectorI[1] == 2);
       CHECK(rowVectorI[2] == 3);
+      CHECK(rowVectorI._vectorFormat == MWP::VectorD::ROW_VECTOR);
+      CHECK(rowVectorI._size == 3);
+      CHECK(rowVectorI._rows == 1);
+      CHECK(rowVectorI._columns == 3);
       MWP::VectorI columnVectorI({1, 2, 3}, 3, MWP::VectorI::COLUMN_VECTOR);
       CHECK(columnVectorI[0] == 1);
       CHECK(columnVectorI[1] == 2);
       CHECK(columnVectorI[2] == 3);
+      CHECK(columnVectorI._vectorFormat == MWP::VectorD::COLUMN_VECTOR);
+      CHECK(columnVectorI._size == 3);
+      CHECK(columnVectorI._rows == 3);
+      CHECK(columnVectorI._columns == 1);
     }
   }
   TEST_CASE("Tests the access elements operator for vectors") {
@@ -135,22 +169,113 @@ TEST_SUITE("Tests the vectos class and its functionalities") {
       CHECK(rowVectorI[0] == 1);
     }
   }
-  // SUBCASE("Should add two vectors") {
-  //   SUBCASE("Should not add two vectors with different dimensions") {
-  //     MWP::VectorD vectorD1({1.0f, 2.0f, 3.0f}, 3, 1);
-  //     MWP::VectorD vectorD2({1.0f, 2.0f, 3.0f}, 1, 3);
-  //     CHECK_THROWS_WITH_AS(vectorD1 + vectorD2,
-  //                          "Invalid vectors dimensions for addition
-  //                          operation", std::runtime_error);
-  //   }
-  //   MWP::VectorD vectorD1({1.0f, 2.0f, 3.0f}, 3, 1);
-  //   MWP::VectorD vectorD2({1.0f, 2.0f, 3.0f}, 3, 1);
-  //   MWP::VectorD vectorDRes1 = vectorD1 + vectorD2;
-  //   CHECK(vectorDRes1[0] == 2.0f);
-  //   CHECK(vectorDRes1[1] == 4.0f);
-  //   CHECK(vectorDRes1[2] == 6.0f);
-  // }
-  // SUBCASE("Should subtract two vectors") {
+  TEST_CASE("Should add two vectors") {
+    MWP::VectorD columnVectorD1({1.0f, 2.0f, 3.0f}, 3,
+                                MWP::VectorD::COLUMN_VECTOR);
+    MWP::VectorD columnVectorD2({4.0f, 5.0f}, 2, MWP::VectorD::COLUMN_VECTOR);
+    MWP::VectorD columnVectorD3({4.0f, 5.0f, 6.0f}, 3,
+                                MWP::VectorD::COLUMN_VECTOR);
+    MWP::VectorI columnVectorI1({1, 2, 3}, 3, MWP::VectorI::COLUMN_VECTOR);
+    MWP::VectorI columnVectorI2({4, 5}, 2, MWP::VectorI::COLUMN_VECTOR);
+    MWP::VectorI columnVectorI3({4, 5, 6}, 3, MWP::VectorI::COLUMN_VECTOR);
+    MWP::VectorD rowVectorD1({1.0f, 2.0f, 3.0f}, 3, MWP::VectorD::ROW_VECTOR);
+    MWP::VectorD rowVectorD2({4.0f, 5.0f}, 2, MWP::VectorD::ROW_VECTOR);
+    MWP::VectorD rowVectorD3({4.0f, 5.0f, 6.0f}, 3, MWP::VectorD::ROW_VECTOR);
+    MWP::VectorI rowVectorI1({1, 2, 3}, 3, MWP::VectorI::ROW_VECTOR);
+    MWP::VectorI rowVectorI2({4, 5}, 2, MWP::VectorI::ROW_VECTOR);
+    MWP::VectorI rowVectorI3({4, 5, 6}, 3, MWP::VectorI::ROW_VECTOR);
+    SUBCASE("Should not add two vectors with different dimensions") {
+      CHECK_THROWS_WITH_AS(
+          columnVectorD1 + columnVectorD2,
+          "Mismatch on vectors dimensions for addition operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          columnVectorI1 + columnVectorI2,
+          "Mismatch on vectors dimensions for addition operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          rowVectorD1 + rowVectorD2,
+          "Mismatch on vectors dimensions for addition operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          rowVectorI1 + rowVectorI2,
+          "Mismatch on vectors dimensions for addition operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          columnVectorD1 + columnVectorI2,
+          "Mismatch on vectors dimensions for addition operation",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          rowVectorD1 + rowVectorI2,
+          "Mismatch on vectors dimensions for addition operation",
+          std::runtime_error);
+    }
+    SUBCASE("Should not add two vectors with different formats") {
+      CHECK_THROWS_WITH_AS(columnVectorD1 + rowVectorD1,
+                           "Mismatch on vectors formats for addition operation",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(columnVectorI1 + rowVectorI1,
+                           "Mismatch on vectors formats for addition operation",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(columnVectorI1 + rowVectorD1,
+                           "Mismatch on vectors formats for addition operation",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(columnVectorD1 + rowVectorI1,
+                           "Mismatch on vectors formats for addition operation",
+                           std::runtime_error);
+    }
+    SUBCASE("Should add two vectors and generate a new one") {
+      MWP::VectorD resultColumnVectorD1 = columnVectorD1 + columnVectorD3;
+      CHECK(resultColumnVectorD1[0] == 5.0f);
+      CHECK(resultColumnVectorD1[1] == 7.0f);
+      CHECK(resultColumnVectorD1[2] == 9.0f);
+      CHECK(resultColumnVectorD1._vectorFormat == MWP::VectorD::COLUMN_VECTOR);
+      CHECK(resultColumnVectorD1._size == 3);
+      CHECK(resultColumnVectorD1._rows == 3);
+      CHECK(resultColumnVectorD1._columns == 1);
+      MWP::VectorD resultRowVectorD1 = rowVectorD1 + rowVectorD3;
+      CHECK(resultRowVectorD1[0] == 5.0f);
+      CHECK(resultRowVectorD1[1] == 7.0f);
+      CHECK(resultRowVectorD1[2] == 9.0f);
+      CHECK(resultRowVectorD1._vectorFormat == MWP::VectorD::ROW_VECTOR);
+      CHECK(resultRowVectorD1._size == 3);
+      CHECK(resultRowVectorD1._rows == 1);
+      CHECK(resultRowVectorD1._columns == 3);
+      MWP::VectorI resultColumnVectorI1 = columnVectorI1 + columnVectorI3;
+      CHECK(resultColumnVectorI1[0] == 5);
+      CHECK(resultColumnVectorI1[1] == 7);
+      CHECK(resultColumnVectorI1[2] == 9);
+      CHECK(resultColumnVectorI1._vectorFormat == MWP::VectorI::COLUMN_VECTOR);
+      CHECK(resultColumnVectorI1._size == 3);
+      CHECK(resultColumnVectorI1._rows == 3);
+      CHECK(resultColumnVectorI1._columns == 1);
+      MWP::VectorI resultRowVectorI1 = rowVectorI1 + rowVectorI3;
+      CHECK(resultRowVectorI1[0] == 5);
+      CHECK(resultRowVectorI1[1] == 7);
+      CHECK(resultRowVectorI1[2] == 9);
+      CHECK(resultRowVectorI1._vectorFormat == MWP::VectorI::ROW_VECTOR);
+      CHECK(resultRowVectorI1._size == 3);
+      CHECK(resultRowVectorI1._rows == 1);
+      CHECK(resultRowVectorI1._columns == 3);
+      MWP::VectorD resultColumnVectorD2 = columnVectorD1 + columnVectorI3;
+      CHECK(resultColumnVectorD2[0] == 5.0f);
+      CHECK(resultColumnVectorD2[1] == 7.0f);
+      CHECK(resultColumnVectorD2[2] == 9.0f);
+      CHECK(resultColumnVectorD2._vectorFormat == MWP::VectorD::COLUMN_VECTOR);
+      CHECK(resultColumnVectorD2._size == 3);
+      CHECK(resultColumnVectorD2._rows == 3);
+      CHECK(resultColumnVectorD2._columns == 1);
+      MWP::VectorI resultRowVectorI2 = rowVectorI1 + rowVectorD3;
+      CHECK(resultRowVectorI2[0] == 5);
+      CHECK(resultRowVectorI2[1] == 7);
+      CHECK(resultRowVectorI2[2] == 9);
+      CHECK(resultRowVectorI2._vectorFormat == MWP::VectorI::ROW_VECTOR);
+      CHECK(resultRowVectorI2._size == 3);
+      CHECK(resultRowVectorI2._rows == 1);
+      CHECK(resultRowVectorI2._columns == 3);
+    }
+  }
+  // TEST_CASE("Should subtract two vectors") {
   //   SUBCASE("Should not subtract two vectors with different dimensions") {
   //     MWP::VectorD vectorD1({1.0f, 2.0f, 3.0f}, 3, 1);
   //     MWP::VectorD vectorD2({1.0f, 2.0f, 3.0f}, 1, 3);

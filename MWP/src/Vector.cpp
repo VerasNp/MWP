@@ -1,4 +1,5 @@
 #include "Vector.hpp"
+#include <cstddef>
 // #include <cmath>
 // #include <iostream>
 // #include <stdexcept>
@@ -10,32 +11,32 @@ template <typename T> Vector<T>::Vector() {
   this->_columns = 0;
   this->_size = 0;
   this->_elements = std::vector<T>();
+  this->_vectorFormat = UNDEFINED;
 }
 
 template <typename T>
-Vector<T>::Vector(unsigned int size, VectorType vectorType) {
+Vector<T>::Vector(unsigned int size, VectorFormat vectorFormat) {
   if (size == 0) {
     throw std::runtime_error("The row or column attribute cannot be zero");
   }
-  if (vectorType == COLUMN_VECTOR) {
+  if (vectorFormat == COLUMN_VECTOR) {
     this->_rows = size;
     this->_columns = 1;
   } else {
     this->_rows = 1;
     this->_columns = size;
   }
+  this->_vectorFormat = vectorFormat;
   this->_size = size;
   this->_elements.resize(this->_size);
-  for (int i = 0; i < this->_rows; i++) {
-    for (int j = 0; j < this->_columns; j++) {
-      this->_elements[i * this->_columns + j] = (T)0;
-    }
+  for (unsigned int i = 0; i < this->_size; i++) {
+    this->_elements[i] = (T)0;
   }
 }
 
 template <typename T>
 Vector<T>::Vector(std::vector<T> elements, unsigned int size,
-                  VectorType vectorType) {
+                  VectorFormat vectorFormat) {
   if (size == 0) {
     throw std::runtime_error("The row or column attribute cannot be zero!");
   }
@@ -43,13 +44,14 @@ Vector<T>::Vector(std::vector<T> elements, unsigned int size,
     throw std::runtime_error(
         "The amount of elements do not match with the vector size!");
   }
-  if (vectorType == COLUMN_VECTOR) {
+  if (vectorFormat == COLUMN_VECTOR) {
     this->_rows = size;
     this->_columns = 1;
   } else {
     this->_rows = 1;
     this->_columns = size;
   }
+  this->_vectorFormat = vectorFormat;
   this->_size = size;
   this->_elements = elements;
 }
@@ -68,18 +70,24 @@ template <typename T> T &Vector<T>::operator[](unsigned int index) {
   return this->_elements[index];
 }
 
-// template <typename T>
-// Vector<T> Vector<T>::operator+(const Vector<T> &vector) const {
-//   if (this->_rows != vector._rows || this->_columns != vector._columns) {
-//     throw std::runtime_error(
-//         "Invalid vectors dimensions for addition operation");
-//   }
-//   Vector<T> result(this->_elements, this->_rows, this->_columns);
-//   for (int i = 0; i < this->_size; i++) {
-//     result._elements[i] = this->_elements[i] + vector._elements[i];
-//   }
-//   return result;
-// }
+template <typename T>
+template <typename U>
+Vector<T> Vector<T>::operator+(const Vector<U> &vector) const {
+  if (this->_size != vector._size) {
+    throw std::runtime_error(
+        "Mismatch on vectors dimensions for addition operation");
+  }
+  if (this->_vectorFormat != vector._vectorFormat) {
+    throw std::runtime_error(
+        "Mismatch on vectors formats for addition operation");
+  }
+  Vector<T> result(this->_size, this->_vectorFormat);
+  for (unsigned int i = 0; i < this->_size; i++) {
+    result._elements[i] = static_cast<T>(this->_elements[i] +
+                                         static_cast<T>(vector._elements[i]));
+  }
+  return result;
+}
 
 // template <typename T>
 // Vector<T> Vector<T>::operator-(const Vector<T> &vector) const {
@@ -141,3 +149,10 @@ template <typename T> T &Vector<T>::operator[](unsigned int index) {
 
 template class MWP::Vector<double>;
 template class MWP::Vector<int>;
+template Vector<double> Vector<double>::operator+
+    <double>(const Vector<double> &) const;
+template Vector<double> Vector<double>::operator+
+    <int>(const Vector<int> &) const;
+template Vector<int> Vector<int>::operator+
+    <double>(const Vector<double> &) const;
+template Vector<int> Vector<int>::operator+ <int>(const Vector<int> &) const;
