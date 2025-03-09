@@ -7,28 +7,46 @@
 // #include <utility>
 // #include <vector>
 
-TEST_CASE("Tests the matrix class") {
-  SUBCASE("Should init a matrix with default values, 0 dimension (columns and "
-          "rows) and no component") {
+TEST_SUITE("Tests the matrix class") {
+  TEST_CASE("Should init a matrix with default values, 0 dimension (columns "
+            "and rows) and no component") {
     MWP::MatrixD matrixD;
     CHECK(matrixD._columns == 0);
     CHECK(matrixD._rows == 0);
     CHECK(matrixD._size == 0);
     CHECK(matrixD._elements.empty());
+    MWP::MatrixD matrixI;
+    CHECK(matrixI._columns == 0);
+    CHECK(matrixI._rows == 0);
+    CHECK(matrixI._size == 0);
+    CHECK(matrixI._elements.empty());
   }
-  SUBCASE("Should init a matrix with all zero components with given rows and "
-          "columns") {
+  TEST_CASE("Should init a matrix with all zero components with given rows and "
+            "columns") {
     SUBCASE("Should not init a matrix with all zero components if columns or "
             "rows are equal to zero") {
-      CHECK_THROWS_WITH_AS(MWP::MatrixD matrix1D(0, 1),
+      CHECK_THROWS_WITH_AS(MWP::MatrixD matrixD(0, 1),
                            "The row or column attribute cannot be zero!",
                            std::runtime_error);
-      CHECK_THROWS_WITH_AS(MWP::MatrixD matrix1D(1, 0),
+      CHECK_THROWS_WITH_AS(MWP::MatrixD matrixD(1, 0),
+                           "The row or column attribute cannot be zero!",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(MWP::MatrixD matrixD(0, 0),
+                           "The row or column attribute cannot be zero!",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(MWP::MatrixI matrixI(0, 1),
+                           "The row or column attribute cannot be zero!",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(MWP::MatrixI matrixI(1, 0),
+                           "The row or column attribute cannot be zero!",
+                           std::runtime_error);
+      CHECK_THROWS_WITH_AS(MWP::MatrixI matrixI(0, 0),
                            "The row or column attribute cannot be zero!",
                            std::runtime_error);
     }
   }
-  //   SUBCASE("Should init a matrix with all zero components with given correct "
+  //   SUBCASE("Should init a matrix with all zero components with given correct
+  //   "
   //           "values of rows and columns") {
   //     MWP::MatrixD matrix1D(3, 1);
   //     for (unsigned int i = 0; i < matrix1D._rows; i++) {
@@ -61,16 +79,20 @@ TEST_CASE("Tests the matrix class") {
   //   }
   // }
   // SUBCASE("Should init a matrix with given elements, columns and rows") {
-  //   SUBCASE("Should not init a matrix with given elements, columns and rows if "
+  //   SUBCASE("Should not init a matrix with given elements, columns and rows
+  //   if "
   //           "the column or rows are equal to zero") {
   //     CHECK_THROWS_WITH_AS(
-  //         MWP::MatrixD matrix1D(std::vector<double>({1.0f, 2.0f, 3.0f}), 0, 1),
-  //         "The row or column attribute cannot be zero", std::runtime_error);
+  //         MWP::MatrixD matrix1D(std::vector<double>({1.0f, 2.0f, 3.0f}), 0,
+  //         1), "The row or column attribute cannot be zero",
+  //         std::runtime_error);
   //     CHECK_THROWS_WITH_AS(
-  //         MWP::MatrixD matrix2D(std::vector<double>({1.0f, 2.0f, 3.0f}), 1, 0),
-  //         "The row or column attribute cannot be zero", std::runtime_error);
+  //         MWP::MatrixD matrix2D(std::vector<double>({1.0f, 2.0f, 3.0f}), 1,
+  //         0), "The row or column attribute cannot be zero",
+  //         std::runtime_error);
   //   }
-  //   SUBCASE("Should not init a matrix with given elements, columns and rows if "
+  //   SUBCASE("Should not init a matrix with given elements, columns and rows
+  //   if "
   //           " the amount of elements do not match with the matrix size") {
   //     CHECK_THROWS_WITH_AS(
   //         MWP::MatrixD matrix2D(std::vector<double>({1.0f, 2.0f}), 1, 3),
@@ -86,7 +108,8 @@ TEST_CASE("Tests the matrix class") {
   //   CHECK(matrixD(2, 0) == 3.0f);
   // }
   // SUBCASE("Should access an element in the matrix") {
-  //   SUBCASE("Should not access element of matrix if index if out of bounds") {
+  //   SUBCASE("Should not access element of matrix if index if out of bounds")
+  //   {
   //     MWP::MatrixD matrix(1, 1);
   //     CHECK_THROWS_WITH_AS(matrix[1], "Index out of bounds",
   //                          std::runtime_error);
@@ -102,8 +125,8 @@ TEST_CASE("Tests the matrix class") {
   //     MWP::MatrixD matrix1D({1.0f, 2.0f, 3.0f}, 1, 3);
   //     MWP::MatrixD matrix2D({1.0f, 2.0f, 3.0f}, 3, 1);
   //     CHECK_THROWS_WITH_AS(matrix1D + matrix2D,
-  //                          "Invalid matrices dimensions for addition operation",
-  //                          std::runtime_error);
+  //                          "Invalid matrices dimensions for addition
+  //                          operation", std::runtime_error);
   //   }
   //   MWP::MatrixD matrix1D({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f}, 3, 2);
   //   MWP::MatrixD matrix2D({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f}, 3, 2);
@@ -116,7 +139,8 @@ TEST_CASE("Tests the matrix class") {
   //   CHECK(matrixDRes(2, 1) == 12.0f);
   // }
   // SUBCASE("Should subtract two matrices") {
-  //   SUBCASE("Should not subtract two matrices with incompatible dimensions") {
+  //   SUBCASE("Should not subtract two matrices with incompatible dimensions")
+  //   {
   //     MWP::MatrixD matrix1D({1.0f, 2.0f, 3.0f}, 1, 3);
   //     MWP::MatrixD matrix2D({1.0f, 2.0f, 3.0f}, 3, 1);
   //     CHECK_THROWS_WITH_AS(
@@ -147,7 +171,8 @@ TEST_CASE("Tests the matrix class") {
   //   CHECK(matrixIRes(2, 0) == 9);
   // }
   // SUBCASE("Should multiply a matrix by another matrix") {
-  //   SUBCASE("Should not multiply a matrix by another matrix with incompatible "
+  //   SUBCASE("Should not multiply a matrix by another matrix with incompatible
+  //   "
   //           "dimensions for multiplication operation") {
   //     MWP::MatrixD matrix1D({1.0f, 2.0f}, 1, 2);
   //     MWP::MatrixD matrix2D({1.0f}, 1, 1);
@@ -207,7 +232,8 @@ TEST_CASE("Tests the matrix class") {
   //   CHECK(!matrix2D.isUpperTriangular());
   // }
   // SUBCASE("Test the identity matrix creation") {
-  //   SUBCASE("Should not create an identity matrix if the given number of rows "
+  //   SUBCASE("Should not create an identity matrix if the given number of rows
+  //   "
   //           "and columns are different") {
   //     CHECK_THROWS_WITH_AS(identityMatrix<double>(1, 2),
   //                          "An identity matrix should have number of rows "
@@ -221,7 +247,8 @@ TEST_CASE("Tests the matrix class") {
   //   CHECK(identityMatrix(1, 1) == 1.0f);
   // }
   // SUBCASE("Should decompose a matrix into LU matrices") {
-  //   SUBCASE("Should not decompose a matrix into LU matrices if the matrix is "
+  //   SUBCASE("Should not decompose a matrix into LU matrices if the matrix is
+  //   "
   //           "not a square matrix") {
   //     MWP::MatrixI matrix({1, 4}, 1, 2);
   //     CHECK_THROWS_WITH_AS(
@@ -253,7 +280,8 @@ TEST_CASE("Tests the matrix class") {
   // }
   // SUBCASE("Should replace a submatrix") {
   //   SUBCASE("Should not get a out of bounds submatrix") {
-  //     MWP::MatrixI matrixMajor({1, 4, 3, 5, 2, 1, 7, 8, 9, 1, 2, 5, 6, 2, 1, 7},
+  //     MWP::MatrixI matrixMajor({1, 4, 3, 5, 2, 1, 7, 8, 9, 1, 2, 5, 6, 2, 1,
+  //     7},
   //                              4, 4);
 
   //     CHECK_THROWS_WITH_AS(matrixMajor.subMatrix(2, 5, 0, 2),
@@ -281,27 +309,31 @@ TEST_CASE("Tests the matrix class") {
   //   CHECK(col._columns == 1);
   // }
   // SUBCASE("Should apply Gram-Schmidt process") {
-  //   MWP::MatrixD matrix({1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
+  //   MWP::MatrixD matrix({1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+  //   0.0f, 1.0f, 1.0f},
   //                       3, 3);
   //   std::pair<MWP::MatrixD, MWP::MatrixD> GSQRDecomposition = GS(matrix);
-  //   CHECK(GSQRDecomposition.first(0, 0) == doctest::Approx(1 / std::sqrt(2)));
-  //   CHECK(GSQRDecomposition.first(0, 1) == doctest::Approx(1 / std::sqrt(6)));
-  //   CHECK(GSQRDecomposition.first(0, 2) == doctest::Approx(-1 / std::sqrt(3)));
-  //   CHECK(GSQRDecomposition.first(1, 0) == doctest::Approx(1 / std::sqrt(2)));
-  //   CHECK(GSQRDecomposition.first(1, 1) == doctest::Approx(-1 / std::sqrt(6)));
-  //   CHECK(GSQRDecomposition.first(1, 2) == doctest::Approx(1 / std::sqrt(3)));
-  //   CHECK(GSQRDecomposition.first(2, 0) == 0.0f);
-  //   CHECK(GSQRDecomposition.first(2, 1) == doctest::Approx(2 / std::sqrt(6)));
-  //   CHECK(GSQRDecomposition.first(2, 2) == doctest::Approx(1 / std::sqrt(3)));
-  //   CHECK(GSQRDecomposition.second(0, 0) == doctest::Approx(2 / std::sqrt(2)));
-  //   CHECK(GSQRDecomposition.second(0, 1) == doctest::Approx(1 / std::sqrt(2)));
-  //   CHECK(GSQRDecomposition.second(0, 2) == doctest::Approx(1 / std::sqrt(2)));
+  //   CHECK(GSQRDecomposition.first(0, 0) == doctest::Approx(1 /
+  //   std::sqrt(2))); CHECK(GSQRDecomposition.first(0, 1) == doctest::Approx(1
+  //   / std::sqrt(6))); CHECK(GSQRDecomposition.first(0, 2) ==
+  //   doctest::Approx(-1 / std::sqrt(3))); CHECK(GSQRDecomposition.first(1, 0)
+  //   == doctest::Approx(1 / std::sqrt(2))); CHECK(GSQRDecomposition.first(1,
+  //   1) == doctest::Approx(-1 / std::sqrt(6)));
+  //   CHECK(GSQRDecomposition.first(1, 2) == doctest::Approx(1 /
+  //   std::sqrt(3))); CHECK(GSQRDecomposition.first(2, 0) == 0.0f);
+  //   CHECK(GSQRDecomposition.first(2, 1) == doctest::Approx(2 /
+  //   std::sqrt(6))); CHECK(GSQRDecomposition.first(2, 2) == doctest::Approx(1
+  //   / std::sqrt(3))); CHECK(GSQRDecomposition.second(0, 0) ==
+  //   doctest::Approx(2 / std::sqrt(2))); CHECK(GSQRDecomposition.second(0, 1)
+  //   == doctest::Approx(1 / std::sqrt(2))); CHECK(GSQRDecomposition.second(0,
+  //   2) == doctest::Approx(1 / std::sqrt(2)));
   //   CHECK(GSQRDecomposition.second(1, 0) == 0.0f);
-  //   CHECK(GSQRDecomposition.second(1, 1) == doctest::Approx(3 / std::sqrt(6)));
-  //   CHECK(GSQRDecomposition.second(1, 2) == doctest::Approx(1 / std::sqrt(6)));
-  //   CHECK(GSQRDecomposition.second(2, 0) == 0.0f);
+  //   CHECK(GSQRDecomposition.second(1, 1) == doctest::Approx(3 /
+  //   std::sqrt(6))); CHECK(GSQRDecomposition.second(1, 2) == doctest::Approx(1
+  //   / std::sqrt(6))); CHECK(GSQRDecomposition.second(2, 0) == 0.0f);
   //   CHECK(GSQRDecomposition.second(2, 1) == 0.0f);
-  //   CHECK(GSQRDecomposition.second(2, 2) == doctest::Approx(2 / std::sqrt(3)));
+  //   CHECK(GSQRDecomposition.second(2, 2) == doctest::Approx(2 /
+  //   std::sqrt(3)));
   // }
   // SUBCASE("Should transform a valid Matrix object into a Vector object") {
   //   MWP::MatrixD matrixD({1.0f, 2.0f, 3.0f}, 3, 1);
@@ -312,7 +344,8 @@ TEST_CASE("Tests the matrix class") {
   // }
 
   // SUBCASE("HouseHolder Q*R=A") {
-  //   MWP::MatrixD matrix({1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
+  //   MWP::MatrixD matrix({1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+  //   0.0f, 1.0f, 1.0f},
   //                       3, 3);
 
   //   std::pair<MWP::MatrixD, MWP::MatrixD> dc = matrix.QRdecomp();
@@ -329,7 +362,8 @@ TEST_CASE("Tests the matrix class") {
   // }
 
   // SUBCASE("HouseHolder Q should be orthogonal") {
-  //   MWP::MatrixD matrix({1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
+  //   MWP::MatrixD matrix({1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+  //   0.0f, 1.0f, 1.0f},
   //                       3, 3);
 
   //   std::pair<MWP::MatrixD, MWP::MatrixD> dc = matrix.QRdecomp();
@@ -373,7 +407,8 @@ TEST_CASE("Tests the matrix class") {
   //   double eigenValue = matrixD.eigenvalue(MWP::MatrixD::RAYLEIGH_QUOTIENT);
   //   CHECK(eigenValue == 6);
   // }
-  // SUBCASE("Test method to find the biggest eigenvalue of a matrix with power method") {
+  // SUBCASE("Test method to find the biggest eigenvalue of a matrix with power
+  // method") {
   //   MWP::MatrixD matrixD({2.0f, 1.0f, 4.0f, 5.0f}, 2, 2);
   //   double eigenValue = matrixD.eigenvalue(MWP::MatrixD::POWER_METHOD);
   //   CHECK(eigenValue == doctest::Approx(6.00023));

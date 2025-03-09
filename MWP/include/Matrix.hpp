@@ -10,12 +10,13 @@
 namespace MWP {
 template <typename T> class Matrix {
 public:
+  enum EigenvalueNumericMethod { POWER_METHOD, QR, RAYLEIGH_QUOTIENT };
+
+public:
   std::vector<T> _elements;
   unsigned int _rows;
   unsigned int _columns;
   unsigned int _size;
-
-  enum EigenvalueNumericMethod { POWER_METHOD, QR, RAYLEIGH_QUOTIENT };
 
 public:
   /**
