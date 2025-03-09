@@ -44,69 +44,70 @@ TEST_SUITE("Tests the matrix class") {
                            "The row or column attribute cannot be zero!",
                            std::runtime_error);
     }
+    SUBCASE("Should init a matrix with all zero components with given correct "
+            "values of rows and columns") {
+      MWP::MatrixD matrix1D(3, 1);
+      for (unsigned int i = 0; i < matrix1D._size; i++) {
+        CHECK(matrix1D._elements[i] == 0.0f);
+      }
+      MWP::MatrixD matrix2D(1, 3);
+      for (unsigned int i = 0; i < matrix2D._size; i++) {
+        CHECK(matrix2D._elements[i] == 0.0f);
+      }
+      MWP::MatrixI matrix1I(3, 3);
+      for (unsigned int i = 0; i < matrix1I._size; i++) {
+        CHECK(matrix1I._elements[i] == 0);
+      }
+      MWP::MatrixI matrix2I(1, 1);
+      for (unsigned int i = 0; i < matrix2I._size; i++) {
+        CHECK(matrix2I._elements[i] == 0);
+      }
+    }
   }
-  //   SUBCASE("Should init a matrix with all zero components with given correct
-  //   "
-  //           "values of rows and columns") {
-  //     MWP::MatrixD matrix1D(3, 1);
-  //     for (unsigned int i = 0; i < matrix1D._rows; i++) {
-  //       for (unsigned int j = 0; j < matrix1D._columns; j++) {
-  //         CHECK(matrix1D[i * matrix1D._columns + j] == 0.0f);
-  //         CHECK(matrix1D(i, j) == 0.0f);
-  //       }
-  //     }
-  //     MWP::MatrixD matrix2D(1, 3);
-  //     for (unsigned int i = 0; i < matrix2D._rows; i++) {
-  //       for (unsigned int j = 0; j < matrix2D._columns; j++) {
-  //         CHECK(matrix2D[i * matrix2D._columns + j] == 0.0f);
-  //         CHECK(matrix2D(i, j) == 0.0f);
-  //       }
-  //     }
-  //     MWP::MatrixI matrix1I(3, 3);
-  //     for (unsigned int i = 0; i < matrix1I._rows; i++) {
-  //       for (unsigned int j = 0; j < matrix1I._columns; j++) {
-  //         CHECK(matrix1I[i * matrix1I._columns + j] == 0);
-  //         CHECK(matrix1I(i, j) == 0);
-  //       }
-  //     }
-  //     MWP::MatrixI matrix2I(1, 1);
-  //     for (unsigned int i = 0; i < matrix2I._rows; i++) {
-  //       for (unsigned int j = 0; j < matrix2I._columns; j++) {
-  //         CHECK(matrix2I[i * matrix2I._columns + j] == 0);
-  //         CHECK(matrix2I(i, j) == 0);
-  //       }
-  //     }
-  //   }
-  // }
-  // SUBCASE("Should init a matrix with given elements, columns and rows") {
-  //   SUBCASE("Should not init a matrix with given elements, columns and rows
-  //   if "
-  //           "the column or rows are equal to zero") {
-  //     CHECK_THROWS_WITH_AS(
-  //         MWP::MatrixD matrix1D(std::vector<double>({1.0f, 2.0f, 3.0f}), 0,
-  //         1), "The row or column attribute cannot be zero",
-  //         std::runtime_error);
-  //     CHECK_THROWS_WITH_AS(
-  //         MWP::MatrixD matrix2D(std::vector<double>({1.0f, 2.0f, 3.0f}), 1,
-  //         0), "The row or column attribute cannot be zero",
-  //         std::runtime_error);
-  //   }
-  //   SUBCASE("Should not init a matrix with given elements, columns and rows
-  //   if "
-  //           " the amount of elements do not match with the matrix size") {
-  //     CHECK_THROWS_WITH_AS(
-  //         MWP::MatrixD matrix2D(std::vector<double>({1.0f, 2.0f}), 1, 3),
-  //         "The amount of elements do not match with the matrix size",
-  //         std::runtime_error);
-  //   }
-  //   MWP::MatrixD matrixD(std::vector<double>({1.0f, 2.0f, 3.0f}), 3, 1);
-  //   CHECK(matrixD[0] == 1.0f);
-  //   CHECK(matrixD(0, 0) == 1.0f);
-  //   CHECK(matrixD[1] == 2.0f);
-  //   CHECK(matrixD(1, 0) == 2.0f);
-  //   CHECK(matrixD[2] == 3.0f);
-  //   CHECK(matrixD(2, 0) == 3.0f);
-  // }
+  TEST_CASE("Should init a matrix with given elements, columns and rows") {
+    SUBCASE("Should not init a matrix with given elements, columns and rows if "
+            "the number of columns or rows are equal to zero") {
+      CHECK_THROWS_WITH_AS(
+          MWP::MatrixD matrixD(std::vector<double>({1.0f, 2.0f, 3.0f}), 0, 1),
+          "The row or column attribute cannot be zero", std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          MWP::MatrixD matrixD(std::vector<double>({1.0f, 2.0f, 3.0f}), 1, 0),
+          "The row or column attribute cannot be zero", std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          MWP::MatrixD matrixD(std::vector<double>({1.0f, 2.0f, 3.0f}), 0, 0),
+          "The row or column attribute cannot be zero", std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          MWP::MatrixI matrixI(std::vector<int>({1, 2, 3}), 0, 1),
+          "The row or column attribute cannot be zero", std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          MWP::MatrixI matrixI(std::vector<int>({1, 2, 3}), 1, 0),
+          "The row or column attribute cannot be zero", std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          MWP::MatrixI matrixI(std::vector<int>({1, 2, 3}), 0, 0),
+          "The row or column attribute cannot be zero", std::runtime_error);
+    }
+    SUBCASE("Should not init a matrix with given elements, columns and rows if "
+            " the amount of elements do not match with the matrix size") {
+      CHECK_THROWS_WITH_AS(
+          MWP::MatrixD matrixD(std::vector<double>({1.0f, 2.0f}), 1, 3),
+          "The amount of elements do not match with the matrix size",
+          std::runtime_error);
+      CHECK_THROWS_WITH_AS(
+          MWP::MatrixI matrixI(std::vector<int>({1, 2}), 1, 3),
+          "The amount of elements do not match with the matrix size",
+          std::runtime_error);
+    }
+    SUBCASE("Should init a matrix with given elements, columns and rows") {
+      MWP::MatrixD matrixD(std::vector<double>({1.0f, 2.0f, 3.0f}), 3, 1);
+      CHECK(matrixD._elements[0] == 1.0f);
+      CHECK(matrixD._elements[1] == 2.0f);
+      CHECK(matrixD._elements[2] == 3.0f);
+      MWP::MatrixI matrixI(std::vector<int>({1, 2, 3}), 3, 1);
+      CHECK(matrixI._elements[0] == 1);
+      CHECK(matrixI._elements[1] == 2);
+      CHECK(matrixI._elements[2] == 3);
+    }
+  }
   // SUBCASE("Should access an element in the matrix") {
   //   SUBCASE("Should not access element of matrix if index if out of bounds")
   //   {

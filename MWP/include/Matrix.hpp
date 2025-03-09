@@ -10,13 +10,12 @@
 namespace MWP {
 template <typename T> class Matrix {
 public:
-  enum EigenvalueNumericMethod { POWER_METHOD, QR, RAYLEIGH_QUOTIENT };
-
-public:
   std::vector<T> _elements;
   unsigned int _rows;
   unsigned int _columns;
   unsigned int _size;
+
+  enum EigenvalueNumericMethod { POWER_METHOD, QR, RAYLEIGH_QUOTIENT };
 
 public:
   /**
@@ -37,263 +36,267 @@ public:
    * @param columns The number of columns in the matrix.
    */
   Matrix<T>(unsigned int rows, unsigned int columns);
+
+  /**
+   * @brief Constructor for given elements, number of rows and columns
+   *
+   * Init the matrix with given columns, rows and set the given
+   * elements
+   *
+   * @tparam T The data type of the matrix elements.
+   * @param elements The elements of matrix.
+   * @param rows The number of rows in the matrix.
+   * @param columns The number of columns in the matrix.
+   */
+  Matrix<T>(std::vector<T> elements, unsigned int rows, unsigned int columns);
+
+  // public:
+  //   /**
+  //    * @brief Access the matrix element by index.
+  //    *
+  //    * This method allows to access a matrix element by the index.
+  //    *
+  //    * @tparam T The data type of the matrix elements
+  //    * @param index The index of the element.
+  //    * @return The value of the element.
+  //    */
+  //   T operator[](unsigned int index) const;
+
+  //   /**
+  //    * @brief Access the matrix element by index.
+  //    *
+  //    * This method allows to access a matrix element by the index.
+  //    *
+  //    * @tparam T The data type of the matrix elements
+  //    * @param index The index of the element.
+  //    * @return The reference to the element.
+  //    */
+  //   T &operator[](unsigned int index);
+
+  //   /**
+  //    * @brief Access the matrix components by row index and column index.
+  //    *
+  //    * This method allows to access a matrix element by its position, using
+  //    column
+  //    * and row indexes.
+  //    *
+  //    * @tparam T description
+  //    * @param rowIndex The row index of the element position.
+  //    * @param columnsIndex The column index of the element position.
+  //    * @return The element in the asked position.
+  //    */
+  //   T operator()(unsigned int rowIndex, unsigned int columnsIndex) const;
+
+  //   /**
+  //    * @brief Access the matrix components by row index and column index.
+  //    *
+  //    * This method allows to access a matrix element by its position, using
+  //    column
+  //    * and row indexes.
+  //    *
+  //    * @tparam T description
+  //    * @param rowIndex The row index of the element position.
+  //    * @param columnsIndex The column index of the element position.
+  //    * @return The element in the asked position.
+  //    */
+  //   T &operator()(unsigned int rowIndex, unsigned int columnsIndex);
+
+  //   /**
+  //    * @brief Overloads the addition operator for Matrix objects.
+  //    *
+  //    * This operator allows for the addition of two Matrix objects.
+  //    *
+  //    * @tparam T The type of the matrix elements.
+  //    * @param matrix The matrix to be added to the current matrix.
+  //    * @return A new Matrix object that is the result of the matrix
+  //    * addition.
+  //    */
+  //   Matrix<T> operator+(const Matrix<T> &matrix) const;
+
+  //   /**
+  //    * @brief Overloads the subtraction operator for Matrix objects.
+  //    *
+  //    * This operator allows for the addition of two Matrix objects.
+  //    *
+  //    * @tparam T The type of the matrix elements.
+  //    * @param matrix The matrix to be subtracted to the current matrix.
+  //    * @return A new Matrix object that is the result of the matrix
+  //    * subtraction.
+  //    */
+  //   Matrix<T> operator-(const Matrix<T> &matrix) const;
+
+  //   /**
+  //   * @brief Overloads the multiplication operator for Matrix objects.
+  //   *
+  //   * This operator allows for the multiplication of a Matrix object by a
+  //   scalar.
+  //   *
+  //   * @tparam T The type of the matrix elements.
+  //   * @param scalar The scalar value to multiply the matrix by.
+  //   * @return A new Matrix object that is the result of the matrix-scalar
+  //   * multiplication.
+  //   */
+  //   Matrix<T> operator*(T scalar) const;
+
+  //   /**
+  //    * @brief Overloads the multiplication operator for Matrix objects.
+  //    *
+  //    * This operator allows for the multiplication of two Matrix objects.
+  //    *
+  //    * @tparam T The type of the matrix elements.
+  //    * @param matrix The matrix to be multiplied by the current matrix.
+  //    * @return A new Matrix object that is the result of the matrix
+  //    * multiplication.
+  //    */
+  //   Matrix<T> operator*(const Matrix<T> &matrix) const;
+
+  //   /**
+  //    * @brief Overloads the multiplication operator for Matrix objects.
+  //    *
+  //    * This operator allows for the multiplication of two Matrix objects.
+  //    *
+  //    * @tparam T The type of the matrix elements.
+  //    * @param matrix The matrix to be multiplied by the current matrix.
+  //    * @return A new Matrix object that is the result of the matrix
+  //    * multiplication.
+  //    */
+  //   Vector<T> operator*(const Vector<T> &vector) const;
+
+  //   // TODO: Implement
+  //   double det() const;
+
+  //   // TODO: Implement
+  //   Matrix<T> inverse() const;
+
+  //   /**
+  //    * @brief Transpose the current matrix
+  //    *
+  //    * Transpose operation, all the row elements turn into column elements
+  //    and
+  //    * vice versa
+  //    *
+  //    * @return Matrix<T> Transposed matrix
+  //    */
+  //   Matrix<T> &transpose();
+
+  //   /**
+  //    * @brief Check if the matrix is square
+  //    *
+  //    * Square matrices have its number of rows equal to the number of
+  //    columns.
+  //    *
+  //    * @return true Is a square matrix
+  //    * @return false Is not a square matrix
+  //    */
+  //   bool isSquare();
+
+  //   /**
+  //    * @brief Check if the matrix is lower triangular
+  //    *
+  //    * Lower triangular matrix is a is a special kind of square matrix with
+  //    all
+  //    * the elements above the main diagonal are zero.
+  //    *
+  //    * @return true Is a lower triangular matrix
+  //    * @return false Is not a lower triangular matrix
+  //    */
+  //   bool isLowerTriangular();
+
+  //   /**
+  //    * @brief Check if the matrix is upper triangular
+  //    *
+  //    * Upper triangular matrix is a is a special kind of square matrix with
+  //    all
+  //    * the elements below the main diagonal are zero.
+  //    *
+  //    * @return true Is a upper triangular matrix
+  //    * @return false Is not a upper triangular matrix
+  //    */
+  //   bool isUpperTriangular();
+
+  //   /**
+  //    * @brief Factors the matrix using lower-upper decomposition
+  //    *
+  //    * Factors the matrix as the product of a lower triangular matrix and an
+  //    upper
+  //    * triangular matrix.
+  //    *
+  //    * @return std::pair<Matrix<T>, Matrix<T>> Lower triangular matrix and an
+  //    * upper triangular matrix
+  //    */
+  //   std::pair<Matrix<double>, Matrix<double>> LUDecomposition();
+
+  //   /**
+  //    * @brief Returns the requested submatrix.
+  //    *
+  //    * Produces a new matrix that is a submatrix of the calling object.
+  //    *
+  //    * @tparam T The type of the matrix elements.
+  //    * @param startRow Initial row.
+  //    * @param startCol Initial col.
+  //    * @param endRow Final row.
+  //    * @param endCol Final col.
+  //    * @return A new Matrix object that is a submatrix of this one.
+  //    */
+  //   MWP::Matrix<T> subMatrix(unsigned int startRow, unsigned int endRow,
+  //                            unsigned int startCol, unsigned int endCol)
+  //                            const;
+
+  //   /**
+  //    * @brief Replaces a submatrix of the current matrix with another smaller
+  //    * matrix.
+  //    *
+  //    * This method replaces a portion of the current matrix (starting at the
+  //    * specified row and column indices) with the elements of the smaller
+  //    matrix.
+  //    *
+  //    * @param smallerMatrix The smaller matrix to insert into the current
+  //    matrix.
+  //    * @param startRow The starting row index in the current matrix.
+  //    * @param startCol The starting column index in the current matrix.
+  //    * @throws std::out_of_range If the smaller matrix does not fit within
+  //    the
+  //    * bounds of the current matrix at the specified starting indices.
+  //    */
+  //   void replaceSubmatrix(const Matrix<T> &smallerMatrix, unsigned int
+  //   startRow,
+  //                         unsigned int startCol);
+
+  //   /**
+  //    * @brief Get the largest column number in modulo.
+  //    *
+  //    * @param col Index of the target column.
+  //    * @return Largest number of the column in module.
+  //    * @throws std::out_of_range If the col index is out of bounds.
+  //    */
+  //   T colMax(unsigned int col) const;
+
+  //   /**
+  //    * @brief Norm2 of the matrix.
+  //    *
+  //    * @return Norm of matrix.
+  //    */
+  //   T norm2() const;
+
+  //   /**
+  //    * @brief QR decomposition of a mxn matrix.
+  //    *
+  //    * @return An orthogonal vector Q and an upper triangular vector R.
+  //    *
+  //    */
+  //   std::pair<Matrix<T>, Matrix<T>> QRdecomp() const;
+
+  //   double eigenvalue(EigenvalueNumericMethod eigtenValueNumericMethod);
+
+  // private:
+  //   double powerMethodEigenvalue(unsigned int iterations = 5, double epsilon
+  //   = 1e-10);
+
+  //   double qrMethodEigenvalue();
+
+  //   double rayleighQuotientEigenvalue(unsigned int iterations = 5, double
+  //   epsilon = 1e-10);
 };
-
-//   /**
-//    * @brief Constructor for given elements and number of rows and columns
-//    *
-//    * Init the matrix with given columns, rows and set the given
-//    * elements
-//    *
-//    * @tparam T The data type of the matrix elements.
-//    * @param elements The elements of matrix.
-//    * @param rows The number of rows in the matrix.
-//    * @param columns The number of columns in the matrix.
-//    */
-//   Matrix<T>(std::vector<T> elements, unsigned int rows, unsigned int
-//   columns);
-
-// public:
-//   /**
-//    * @brief Access the matrix element by index.
-//    *
-//    * This method allows to access a matrix element by the index.
-//    *
-//    * @tparam T The data type of the matrix elements
-//    * @param index The index of the element.
-//    * @return The value of the element.
-//    */
-//   T operator[](unsigned int index) const;
-
-//   /**
-//    * @brief Access the matrix element by index.
-//    *
-//    * This method allows to access a matrix element by the index.
-//    *
-//    * @tparam T The data type of the matrix elements
-//    * @param index The index of the element.
-//    * @return The reference to the element.
-//    */
-//   T &operator[](unsigned int index);
-
-//   /**
-//    * @brief Access the matrix components by row index and column index.
-//    *
-//    * This method allows to access a matrix element by its position, using
-//    column
-//    * and row indexes.
-//    *
-//    * @tparam T description
-//    * @param rowIndex The row index of the element position.
-//    * @param columnsIndex The column index of the element position.
-//    * @return The element in the asked position.
-//    */
-//   T operator()(unsigned int rowIndex, unsigned int columnsIndex) const;
-
-//   /**
-//    * @brief Access the matrix components by row index and column index.
-//    *
-//    * This method allows to access a matrix element by its position, using
-//    column
-//    * and row indexes.
-//    *
-//    * @tparam T description
-//    * @param rowIndex The row index of the element position.
-//    * @param columnsIndex The column index of the element position.
-//    * @return The element in the asked position.
-//    */
-//   T &operator()(unsigned int rowIndex, unsigned int columnsIndex);
-
-//   /**
-//    * @brief Overloads the addition operator for Matrix objects.
-//    *
-//    * This operator allows for the addition of two Matrix objects.
-//    *
-//    * @tparam T The type of the matrix elements.
-//    * @param matrix The matrix to be added to the current matrix.
-//    * @return A new Matrix object that is the result of the matrix
-//    * addition.
-//    */
-//   Matrix<T> operator+(const Matrix<T> &matrix) const;
-
-//   /**
-//    * @brief Overloads the subtraction operator for Matrix objects.
-//    *
-//    * This operator allows for the addition of two Matrix objects.
-//    *
-//    * @tparam T The type of the matrix elements.
-//    * @param matrix The matrix to be subtracted to the current matrix.
-//    * @return A new Matrix object that is the result of the matrix
-//    * subtraction.
-//    */
-//   Matrix<T> operator-(const Matrix<T> &matrix) const;
-
-//   /**
-//   * @brief Overloads the multiplication operator for Matrix objects.
-//   *
-//   * This operator allows for the multiplication of a Matrix object by a
-//   scalar.
-//   *
-//   * @tparam T The type of the matrix elements.
-//   * @param scalar The scalar value to multiply the matrix by.
-//   * @return A new Matrix object that is the result of the matrix-scalar
-//   * multiplication.
-//   */
-//   Matrix<T> operator*(T scalar) const;
-
-//   /**
-//    * @brief Overloads the multiplication operator for Matrix objects.
-//    *
-//    * This operator allows for the multiplication of two Matrix objects.
-//    *
-//    * @tparam T The type of the matrix elements.
-//    * @param matrix The matrix to be multiplied by the current matrix.
-//    * @return A new Matrix object that is the result of the matrix
-//    * multiplication.
-//    */
-//   Matrix<T> operator*(const Matrix<T> &matrix) const;
-
-//   /**
-//    * @brief Overloads the multiplication operator for Matrix objects.
-//    *
-//    * This operator allows for the multiplication of two Matrix objects.
-//    *
-//    * @tparam T The type of the matrix elements.
-//    * @param matrix The matrix to be multiplied by the current matrix.
-//    * @return A new Matrix object that is the result of the matrix
-//    * multiplication.
-//    */
-//   Vector<T> operator*(const Vector<T> &vector) const;
-
-//   // TODO: Implement
-//   double det() const;
-
-//   // TODO: Implement
-//   Matrix<T> inverse() const;
-
-//   /**
-//    * @brief Transpose the current matrix
-//    *
-//    * Transpose operation, all the row elements turn into column elements and
-//    * vice versa
-//    *
-//    * @return Matrix<T> Transposed matrix
-//    */
-//   Matrix<T> &transpose();
-
-//   /**
-//    * @brief Check if the matrix is square
-//    *
-//    * Square matrices have its number of rows equal to the number of columns.
-//    *
-//    * @return true Is a square matrix
-//    * @return false Is not a square matrix
-//    */
-//   bool isSquare();
-
-//   /**
-//    * @brief Check if the matrix is lower triangular
-//    *
-//    * Lower triangular matrix is a is a special kind of square matrix with all
-//    * the elements above the main diagonal are zero.
-//    *
-//    * @return true Is a lower triangular matrix
-//    * @return false Is not a lower triangular matrix
-//    */
-//   bool isLowerTriangular();
-
-//   /**
-//    * @brief Check if the matrix is upper triangular
-//    *
-//    * Upper triangular matrix is a is a special kind of square matrix with all
-//    * the elements below the main diagonal are zero.
-//    *
-//    * @return true Is a upper triangular matrix
-//    * @return false Is not a upper triangular matrix
-//    */
-//   bool isUpperTriangular();
-
-//   /**
-//    * @brief Factors the matrix using lower-upper decomposition
-//    *
-//    * Factors the matrix as the product of a lower triangular matrix and an
-//    upper
-//    * triangular matrix.
-//    *
-//    * @return std::pair<Matrix<T>, Matrix<T>> Lower triangular matrix and an
-//    * upper triangular matrix
-//    */
-//   std::pair<Matrix<double>, Matrix<double>> LUDecomposition();
-
-//   /**
-//    * @brief Returns the requested submatrix.
-//    *
-//    * Produces a new matrix that is a submatrix of the calling object.
-//    *
-//    * @tparam T The type of the matrix elements.
-//    * @param startRow Initial row.
-//    * @param startCol Initial col.
-//    * @param endRow Final row.
-//    * @param endCol Final col.
-//    * @return A new Matrix object that is a submatrix of this one.
-//    */
-//   MWP::Matrix<T> subMatrix(unsigned int startRow, unsigned int endRow,
-//                            unsigned int startCol, unsigned int endCol) const;
-
-//   /**
-//    * @brief Replaces a submatrix of the current matrix with another smaller
-//    * matrix.
-//    *
-//    * This method replaces a portion of the current matrix (starting at the
-//    * specified row and column indices) with the elements of the smaller
-//    matrix.
-//    *
-//    * @param smallerMatrix The smaller matrix to insert into the current
-//    matrix.
-//    * @param startRow The starting row index in the current matrix.
-//    * @param startCol The starting column index in the current matrix.
-//    * @throws std::out_of_range If the smaller matrix does not fit within the
-//    * bounds of the current matrix at the specified starting indices.
-//    */
-//   void replaceSubmatrix(const Matrix<T> &smallerMatrix, unsigned int
-//   startRow,
-//                         unsigned int startCol);
-
-//   /**
-//    * @brief Get the largest column number in modulo.
-//    *
-//    * @param col Index of the target column.
-//    * @return Largest number of the column in module.
-//    * @throws std::out_of_range If the col index is out of bounds.
-//    */
-//   T colMax(unsigned int col) const;
-
-//   /**
-//    * @brief Norm2 of the matrix.
-//    *
-//    * @return Norm of matrix.
-//    */
-//   T norm2() const;
-
-//   /**
-//    * @brief QR decomposition of a mxn matrix.
-//    *
-//    * @return An orthogonal vector Q and an upper triangular vector R.
-//    *
-//    */
-//   std::pair<Matrix<T>, Matrix<T>> QRdecomp() const;
-
-//   double eigenvalue(EigenvalueNumericMethod eigtenValueNumericMethod);
-
-// private:
-//   double powerMethodEigenvalue(unsigned int iterations = 5, double epsilon =
-//   1e-10);
-
-//   double qrMethodEigenvalue();
-
-//   double rayleighQuotientEigenvalue(unsigned int iterations = 5, double
-//   epsilon = 1e-10);
-// };
 typedef Matrix<double> MatrixD;
 typedef Matrix<int> MatrixI;
 } // namespace MWP

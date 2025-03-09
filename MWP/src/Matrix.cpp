@@ -10,10 +10,10 @@
 using namespace MWP;
 
 template <typename T> Matrix<T>::Matrix() {
-  _rows = 0;
-  _columns = 0;
-  _size = 0;
-  _elements = std::vector<T>();
+  this->_rows = 0;
+  this->_columns = 0;
+  this->_size = 0;
+  this->_elements = std::vector<T>();
 }
 
 template <typename T>
@@ -24,27 +24,27 @@ Matrix<T>::Matrix(unsigned int rows, unsigned int columns) {
   this->_rows = rows;
   this->_columns = columns;
   this->_size = rows * columns;
-  _elements.resize(this->_size);
+  this->_elements.resize(this->_size);
   for (unsigned int i = 0; i < this->_size; i++) {
     this->_elements[i] = (T)0;
   }
 }
 
-// template <typename T>
-// Matrix<T>::Matrix(std::vector<T> elements, unsigned int rows,
-//                   unsigned int columns) {
-//   if (columns == 0 || rows == 0) {
-//     throw std::runtime_error("The row or column attribute cannot be zero");
-//   }
-//   if (elements.size() != columns * rows) {
-//     throw std::runtime_error(
-//         "The amount of elements do not match with the matrix size");
-//   }
-//   _rows = rows;
-//   _columns = columns;
-//   _size = rows * columns;
-//   _elements = elements;
-// }
+template <typename T>
+Matrix<T>::Matrix(std::vector<T> elements, unsigned int rows,
+                  unsigned int columns) {
+  if (columns == 0 || rows == 0) {
+    throw std::runtime_error("The row or column attribute cannot be zero");
+  }
+  if (elements.size() != columns * rows) {
+    throw std::runtime_error(
+        "The amount of elements do not match with the matrix size");
+  }
+  this->_rows = rows;
+  this->_columns = columns;
+  this->_size = rows * columns;
+  this->_elements = elements;
+}
 
 // template <typename T> T Matrix<T>::operator[](unsigned int index) const {
 //   if (index > this->_size - 1) {
@@ -202,7 +202,8 @@ Matrix<T>::Matrix(unsigned int rows, unsigned int columns) {
 //   return true;
 // }
 
-// template <typename T> std::pair<MatrixD, MatrixD> Matrix<T>::LUDecomposition() {
+// template <typename T> std::pair<MatrixD, MatrixD>
+// Matrix<T>::LUDecomposition() {
 //   if (this->_rows != this->_columns) {
 //     throw std::runtime_error(
 //         "The matrix should be square to be decomposed into LU matrices!");
@@ -215,10 +216,12 @@ Matrix<T>::Matrix(unsigned int rows, unsigned int columns) {
 //     for (int j = 0; j < this->_columns; j++) {
 //       if (i > j) {
 //         LMatrix[i * this->_columns + j] =
-//             UMatrix[i * this->_columns + j] / UMatrix[j * this->_columns + j];
+//             UMatrix[i * this->_columns + j] / UMatrix[j * this->_columns +
+//             j];
 //         for (int k = j; k < this->_columns; k++) {
 //           UMatrix[i * this->_columns + k] -=
-//               LMatrix[i * this->_columns + j] * UMatrix[j * this->_columns + k];
+//               LMatrix[i * this->_columns + j] * UMatrix[j * this->_columns +
+//               k];
 //         }
 //       }
 //     }
@@ -303,7 +306,8 @@ Matrix<T>::Matrix(unsigned int rows, unsigned int columns) {
 //     T uhNorm = uh.norm2();
 //     Matrix<T> qsub = Q.subMatrix(0, Q._rows, i, Q._columns);
 //     Matrix<T> qres = qsub - (qsub * (2.f / (uhNorm * uhNorm))) *
-//                                 (uh * TransposeMatrix<T>(uh)); // qsub - qumul;
+//                                 (uh * TransposeMatrix<T>(uh)); // qsub -
+//                                 qumul;
 //     Q.replaceSubmatrix(qres, 0, i);
 //   }
 //   return {Q, R};
@@ -351,8 +355,9 @@ Matrix<T>::Matrix(unsigned int rows, unsigned int columns) {
 //                                              double epsilon) {
 //   Vector<T> x = randomColumnVector<T>(this->_rows, 10, 20);
 //   x = x * (1 / x.norm2());
-//   Matrix<T> identityMatrix = ::identityMatrix<T>(this->_rows, this->_columns);
-//   for (unsigned int iteration = 0; iteration < iterations; iteration++) {
+//   Matrix<T> identityMatrix = ::identityMatrix<T>(this->_rows,
+//   this->_columns); for (unsigned int iteration = 0; iteration < iterations;
+//   iteration++) {
 //     double rho = ((transposeVector(x) * (*this * x)) *
 //                   (1 / (transposeVector(x) * x)[0]))[0];
 //     Vector<T> newX;

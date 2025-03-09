@@ -2,50 +2,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug CTest Matrix",
-            "type": "cppdbg",
+            "name": "Debug Test",
+            "type": "cppdbg", // Use "lldb" for macOS/LLDB
             "request": "launch",
-            "program": "/usr/bin/ctest",
-            "args": [
-                "-VV",
-                "--test-dir",
-                "${workspaceFolder}/build",
-                "-R",
-                "Matrix"
-            ],
-            "stopAtEntry": false,
+            "program": "${workspaceFolder}/build/MWP/tests/Matrix", // Path to your test
+            "args": [], // Add command-line args if needed
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "preLaunchTask": "build tests",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "Debug Matrix Test",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/Matrix_test",
-            "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "preLaunchTask": "build tests",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        }
+            "MIMode": "gdb" // Use "lldb" for macOS
+          }
     ]
 }
