@@ -120,12 +120,17 @@ template <typename T> Vector<T> Vector<T>::operator*(T scalar) const {
 }
 
 // template <typename T>
-// Vector<T> Vector<T>::operator*(const Vector<T> &vector) const {
+// template <typename U>
+// Matrix<T> Vector<T>::operator*(const Vector<U> &vector) const {
+//   if (this->_size != vector._size) {
+//     throw std::runtime_error(
+//         "Mismatch on vectors dimensions for multiplication operation");
+//   }
 //   if (this->_columns != vector._rows) {
 //     throw std::runtime_error(
-//         "Invalid dimensions for vector-vector multiplication");
+//         "Mismatch on column and row dimension for multiplication operation");
 //   }
-//   Vector<T> result(this->_rows, vector._columns);
+//   Matrix<T> result(this->_rows, vector._columns);
 //   for (int i = 0; i < this->_rows; i++) {
 //     result[i] = (T)0;
 //     for (int j = 0; j < this->_columns; j++) {
@@ -172,3 +177,10 @@ template Vector<double> Vector<double>::operator-
 template Vector<int> Vector<int>::operator-
     <double>(const Vector<double> &) const;
 template Vector<int> Vector<int>::operator- <int>(const Vector<int> &) const;
+// template Matrix<double> Vector<double>::operator*
+//     <double>(const Vector<double> &) const;
+// template Matrix<double> Vector<double>::operator*
+//     <int>(const Vector<int> &) const;
+// template Matrix<int> Vector<int>::operator*
+//     <double>(const Vector<double> &) const;
+// template Matrix<int> Vector<int>::operator* <int>(const Vector<int> &) const;

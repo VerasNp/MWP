@@ -424,21 +424,70 @@ TEST_SUITE("Tests the vectos class and its functionalities") {
     CHECK(resultRowVectorI._rows == 1);
     CHECK(resultRowVectorI._columns == 3);
   }
-  // SUBCASE("Should multiply a vector by another vector") {
-  //   SUBCASE("Should not multiply a vector by another vector with incompatible
-  //   "
-  //           "dimensions for multiplication operation") {
-  //     MWP::VectorD vector1D({1.0f, 2.0f}, 1, 2);
-  //     MWP::VectorD vector2D({1.0f}, 1, 1);
+  // TEST_CASE("Should multiply a vector by another vector") {
+  //   MWP::VectorD columnVectorD1({1.0f, 2.0f, 3.0f}, 3,
+  //                               MWP::VectorD::COLUMN_VECTOR);
+  //   MWP::VectorD columnVectorD2({4.0f, 5.0f}, 2, MWP::VectorD::COLUMN_VECTOR);
+  //   MWP::VectorD columnVectorD3({4.0f, 5.0f, 6.0f}, 3,
+  //                               MWP::VectorD::COLUMN_VECTOR);
+  //   MWP::VectorI columnVectorI1({1, 2, 3}, 3, MWP::VectorI::COLUMN_VECTOR);
+  //   MWP::VectorI columnVectorI2({4, 5}, 2, MWP::VectorI::COLUMN_VECTOR);
+  //   MWP::VectorI columnVectorI3({4, 5, 6}, 3, MWP::VectorI::COLUMN_VECTOR);
+  //   MWP::VectorD rowVectorD1({1.0f, 2.0f, 3.0f}, 3, MWP::VectorD::ROW_VECTOR);
+  //   MWP::VectorD rowVectorD2({4.0f, 5.0f}, 2, MWP::VectorD::ROW_VECTOR);
+  //   MWP::VectorD rowVectorD3({4.0f, 5.0f, 6.0f}, 3, MWP::VectorD::ROW_VECTOR);
+  //   MWP::VectorI rowVectorI1({1, 2, 3}, 3, MWP::VectorI::ROW_VECTOR);
+  //   MWP::VectorI rowVectorI2({4, 5}, 2, MWP::VectorI::ROW_VECTOR);
+  //   MWP::VectorI rowVectorI3({4, 5, 6}, 3, MWP::VectorI::ROW_VECTOR);
+  //   SUBCASE("Should not multiply two vectors with different dimensions") {
   //     CHECK_THROWS_WITH_AS(
-  //         vector1D * vector2D,
-  //         "Invalid dimensions for vector-vector multiplication",
+  //         columnVectorD1 * rowVectorD2,
+  //         "Mismatch on vectors dimensions for multiplication operation",
+  //         std::runtime_error);
+  //     CHECK_THROWS_WITH_AS(
+  //         columnVectorI1 * rowVectorI2,
+  //         "Mismatch on vectors dimensions for multiplication operation",
+  //         std::runtime_error);
+  //     CHECK_THROWS_WITH_AS(
+  //         rowVectorD1 * columnVectorD2,
+  //         "Mismatch on vectors dimensions for multiplication operation",
+  //         std::runtime_error);
+  //     CHECK_THROWS_WITH_AS(
+  //         rowVectorI1 * rowVectorI2,
+  //         "Mismatch on vectors dimensions for multiplication operation",
+  //         std::runtime_error);
+  //     CHECK_THROWS_WITH_AS(
+  //         columnVectorD1 * columnVectorD2,
+  //         "Mismatch on vectors dimensions for multiplication operation",
+  //         std::runtime_error);
+  //     CHECK_THROWS_WITH_AS(
+  //         rowVectorD1 * columnVectorI2,
+  //         "Mismatch on vectors dimensions for multiplication operation",
   //         std::runtime_error);
   //   }
-  //   MWP::VectorD vector1D({1.0f, 2.0f, 3.0f}, 1, 3);
-  //   MWP::VectorD vector2D({1.0f, 2.0f, 3.0f}, 3, 1);
-  //   MWP::VectorD vectorDRes = vector1D * vector2D;
-  //   CHECK(vectorDRes[0] == 14.0f);
+  //   SUBCASE("Should not multiply two vectors if the dimension of columns "
+  //           "(left-side) and rows (right-side) do not match") {
+  //     CHECK_THROWS_WITH_AS(
+  //         columnVectorD1 * columnVectorD3,
+  //         "Mismatch on vectors formats for multiplication operation",
+  //         std::runtime_error);
+  //     CHECK_THROWS_WITH_AS(
+  //         columnVectorI1 * rowVectorD3,
+  //         "Mismatch on vectors formats for multiplication operation",
+  //         std::runtime_error);
+  //     CHECK_THROWS_WITH_AS(
+  //         columnVectorI1 * columnVectorI3,
+  //         "Mismatch on vectors formats for subtraction operation",
+  //         std::runtime_error);
+  //     CHECK_THROWS_WITH_AS(
+  //         columnVectorD1 * rowVectorI3,
+  //         "Mismatch on vectors formats for subtraction operation",
+  //         std::runtime_error);
+  //   }
+  //   SUBCASE("Should multiply two vectors") {
+  //     MWP::VectorD vectorDRes = vector1D * vector2D;
+  //     CHECK(vectorDRes[0] == 14.0f);
+  //   }
   // }
   // SUBCASE("Should project a vector onto another vector") {
   //   SUBCASE("Should not project a vector onto another vector if the current "
