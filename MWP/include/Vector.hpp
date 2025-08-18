@@ -155,7 +155,6 @@ inline MWP::Vector<T> transposeVector(const MWP::Vector<T> &vector) {
 
 template <typename T>
 inline T Dot(const MWP::Vector<T> &vector1, const MWP::Vector<T> &vector2) {
-  // TODO: Check compatibility
   T sum = (T)0;
   for (int i = 0; i < vector1._size; i++) {
     sum += vector1._elements[i] * vector2._elements[i];
