@@ -1,3 +1,3 @@
-# Monkey With Pencil (MWP)
+# Mammoth With Pencil (MWP)
 
-Monkey With Pencil is a lib to work with vectors and matrices operations.
+Mammoth With Pencil is a lib to work with vectors and matrices operations.
